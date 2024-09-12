@@ -13,9 +13,9 @@ https://api.wallapop.com/api/v3/categories
 
 ### Search | Buscar 
 To find an example, open Wallapop in your browser (Chrome) and search for what you want with the desired criteria (name, distance, order, price, etc.)
-Para buscar un ejemplo abre wallapop en el navegador (Chrome) y busca lo que quieras con los criterios deseados (nombre, distancia, orden, precio, etc.)
-
 Enter developer mode (Ctrl + i) and then look in the "Network" tab for a row that says "search?source=...". Select the row and right-click to open it in a new tab.
+
+Para buscar un ejemplo abre wallapop en el navegador (Chrome) y busca lo que quieras con los criterios deseados (nombre, distancia, orden, precio, etc.)
 Entra en modo desarrollador (Ctrl + i) y luego busca en la pestaña "Network" una fila que ponga "search?source=...". Selecciona la fila y con el botón derecho ábrelo en una nueva pestaña
 
 Main URL | URL principal: https://api.wallapop.com/api/v3/general/search"
