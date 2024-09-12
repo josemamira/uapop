@@ -4,3 +4,4 @@
 - LibreOffice Calc
 - CSV
 - GeoJSON
+- Generic
