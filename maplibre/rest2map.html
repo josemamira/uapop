@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos en el Mapa</title>
+    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        body, html { margin: 0; padding: 0; }
+        #map { width: 100%; height: 100vh; }
+        .popup-content { font-family: Arial, sans-serif; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <script>
+        // URL de la API
+        const apiUrl = 'https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest&distance_in_km=1&search_id=fa63a7d2-a30f-4769-8d9b-80ec3c2da039&show_multiple_sections=false'; // Cambia esta URL a la correcta
+
+        // Crear el mapa
+        const map = new maplibregl.Map({
+            container: 'map', // ID del contenedor
+            style: 'https://demotiles.maplibre.org/style.json', // Estilo del mapa
+            center: [-0.5136703604018271, 38.39162300725718], // Centro inicial (puede cambiar según la ubicación deseada)
+            zoom: 12
+        });
+
+        // Agregar control de navegación (zoom y rotación)
+        map.addControl(new maplibregl.NavigationControl());
+
+        // Función para agregar puntos al mapa
+        function addMarkersToMap(products) {
+            products.forEach(product => {
+                const el = document.createElement('div');
+                el.className = 'marker';
+
+                // Crear el marcador
+                new maplibregl.Marker(el)
+                    .setLngLat([product.location.longitude, product.location.latitude])
+                    .setPopup(new maplibregl.Popup({ offset: 25 }) // Añadir un popup
+                        .setHTML(`
+                            <div class="popup-content">
+                                <h3>${product.title}</h3>
+                                <p>${product.description}</p>
+                                <p><strong>Precio:</strong> ${product.price.amount} ${product.price.currency}</p>
+                                <img src="${product.images[0].urls.small}" alt="${product.title}" />
+                            </div>
+                        `))
+                    .addTo(map);
+            });
+        }
+
+        // Obtener datos de la API y agregarlos al mapa
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const products = data.data.section.payload.items;
+                console.log(products);
+                addMarkersToMap(products);
+            })
+            .catch(error => console.error('Error al obtener los productos:', error));
+    </script>
+</body>
+</html>
