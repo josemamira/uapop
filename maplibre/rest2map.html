@@ -49,7 +49,7 @@
 
         // Función para agregar puntos al mapa
         function addMarkersToMap(products) {
-            console.log(products[1]);
+            //console.log(products[1]);
             products.forEach(product => {
                 const el = document.createElement('div');
                 el.className = 'marker';
@@ -83,21 +83,13 @@
         }
 
         // Obtener datos de la API y agregarlos al mapa
-        /*fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                const products = data.data.section.payload.items;
-                console.log(products);
-                addMarkersToMap(products);
-            })
-            .catch(error => console.error('Error al obtener los productos:', error));*/
 
         document.body.onload = function () {
             fetch(apiUrl)
                 .then(response => response.json()) // Convertir respuesta a JSON
                 .then(data => {
                     // Mostrar resultado en la página
-                    console.log(data);
+                    //console.log(data);
                     const products = data.data.section.payload.items; console.log(products);
                     addMarkersToMap(products);
                 })
