@@ -1,43 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos en el Mapa</title>
     <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
     <style>
-        body, html { margin: 0; padding: 0; }
-        #map { width: 100%; height: 100vh; }
-        .popup-content { font-family: Arial, sans-serif; }
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .popup-content {
+            font-family: Arial, sans-serif;
+        }
     </style>
 </head>
+
 <body>
     <div id="map"></div>
-    
+
     <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
     <script>
         // URL de la API
         const apiUrl = 'https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest&distance_in_km=1'; // Cambia esta URL a la correcta
 
-        // Crear el mapa
+        // Inicializa el mapa
+        const key = 'FarArRCYRxNEd0LV6d95';
         const map = new maplibregl.Map({
             container: 'map', // ID del contenedor
-            style: 'https://demotiles.maplibre.org/style.json', // Estilo del mapa
-            center: [-0.5136703604018271, 38.39162300725718], // Centro inicial (puede cambiar según la ubicación deseada)
-            zoom: 12
+            style: 'https://api.maptiler.com/maps/streets/style.json?key=' + key, // URL de estilo de MapLibre
+            center: [-0.51, 38.38], // Coordenadas iniciales [longitud, latitud]
+            zoom: 12 // Nivel de zoom inicial
         });
+
+        // Añadir controles de zoom y rotación al mapa
+        map.addControl(new maplibregl.NavigationControl());
 
         // Agregar control de navegación (zoom y rotación)
         map.addControl(new maplibregl.NavigationControl());
 
         // Función para agregar puntos al mapa
         function addMarkersToMap(products) {
+            console.log(products[1]);
             products.forEach(product => {
                 const el = document.createElement('div');
                 el.className = 'marker';
 
+                const marker = new maplibregl.Marker()
+                    .setLngLat([product.location.longitude, product.location.latitude])
+                    .setPopup(new maplibregl.Popup({ offset: 25 }) // Añadir un popup
+                        .setHTML(`
+                            <div class="popup-content">
+                                <h3>${product.title}</h3>
+                                <p>${product.description}</p>
+                                <p><strong>Precio:</strong> ${product.price.amount} ${product.price.currency}</p>
+                                <img src="${product.images[0].urls.small}" alt="${product.title}" width=220/>
+                            </div>
+                        `))
+                    .addTo(map);
                 // Crear el marcador
-                new maplibregl.Marker(el)
+                /*new maplibregl.Marker(el)
                     .setLngLat([product.location.longitude, product.location.latitude])
                     .setPopup(new maplibregl.Popup({ offset: 25 }) // Añadir un popup
                         .setHTML(`
@@ -48,19 +78,35 @@
                                 <img src="${product.images[0].urls.small}" alt="${product.title}" />
                             </div>
                         `))
-                    .addTo(map);
+                    .addTo(map);*/
             });
         }
 
         // Obtener datos de la API y agregarlos al mapa
-        fetch(apiUrl)
+        /*fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
                 const products = data.data.section.payload.items;
                 console.log(products);
                 addMarkersToMap(products);
             })
-            .catch(error => console.error('Error al obtener los productos:', error));
+            .catch(error => console.error('Error al obtener los productos:', error));*/
+
+        document.body.onload = function () {
+            fetch(apiUrl)
+                .then(response => response.json()) // Convertir respuesta a JSON
+                .then(data => {
+                    // Mostrar resultado en la página
+                    console.log(data);
+                    const products = data.data.section.payload.items; console.log(products);
+                    addMarkersToMap(products);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al obtener los datos');
+                });
+        }
     </script>
 </body>
+
 </html>
