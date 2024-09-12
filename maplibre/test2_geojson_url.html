@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa con MapLibre GL JS</title>
+    <script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
+    <link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
+    <style>
+        body { margin: 0; }
+        #map { width: 100vw; height: 100vh; }
+        .mapboxgl-popup-content img { max-width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    
+    <script>
+        maplibregl.accessToken = 'YOUR_ACCESS_TOKEN';  // Opcional si tu mapa requiere un token
+
+        const map = new maplibregl.Map({
+            container: 'map', // ID del contenedor del mapa
+            style: 'https://demotiles.maplibre.org/style.json', // Estilo del mapa
+            center: [-0.51, 38.38], // Coordenadas iniciales [longitud, latitud]
+			zoom: 12 // Nivel de zoom inicial
+        });
+        /*// Inicializa el mapa
+		const key = 'FarArRCYRxNEd0LV6d95';
+		const map = new maplibregl.Map({
+			container: 'map', // ID del contenedor
+			style: 'https://api.maptiler.com/maps/streets/style.json?key='+key, // URL de estilo de MapLibre
+			center: [-0.51, 38.38], // Coordenadas iniciales [longitud, latitud]
+			zoom: 12 // Nivel de zoom inicial
+		});*/
+
+        map.on('load', () => {
+            map.addSource('points', {
+                type: 'geojson',
+                data: './data/items.geojson' // Reemplaza con la URL de tu archivo GeoJSON
+            });
+
+            map.addLayer({
+                id: 'points-layer',
+                type: 'circle',
+                source: 'points',
+                paint: {
+                    'circle-radius': 6,
+                    'circle-color': '#ff5200'
+                }
+            });
+
+            map.on('click', 'points-layer', (e) => {
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                const properties = e.features[0].properties;
+
+                // Crear el contenido del popup
+                const popupContent = `
+                    <div>
+                        <strong>Propiedades:</strong><br>
+                        ${Object.entries(properties).map(([key, value]) => `
+                            <p><strong>${key}:</strong> ${value}</p>
+                        `).join('')}
+                        ${properties.image ? `<img src="${properties.image}" alt="Imagen" />` : ''}
+                    </div>
+                `;
+
+                new maplibregl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(popupContent)
+                    .addTo(map);
+            });
+
+            // Cambia el cursor al pasar sobre los puntos
+            map.on('mouseenter', 'points-layer', () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Restaura el cursor cuando se deja de pasar sobre los puntos
+            map.on('mouseleave', 'points-layer', () => {
+                map.getCanvas().style.cursor = '';
+            });
+        });
+    </script>
+</body>
+</html>
