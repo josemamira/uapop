@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos en el Mapa</title>
+    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/slider.css" />
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .popup-content {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <link rel="stylesheet" href="css/panel.css" />
+
+    <div id="map"></div>
+    <div class="map-overlay top">
+        <div class="map-overlay-inner">
+            <fieldset>
+                <label for="category">Seleccionar categoria</label>
+                <select id="category" name="category">
+                    <option value="0">Sin categoría</option>
+                </select>
+            </fieldset>
+            <fieldset>
+                <label for="keywords">Producto</label>
+                <input type="text" id="keywords" name="keywords" />
+            </fieldset>
+            <fieldset>
+                <label for="distance_in_km">Seleccionar categoria</label>
+                <select id="distance_in_km" name="distance_in_km">
+                    <option value="0">Sin límites</option>
+                    <option value="1">1 km</option>
+                    <option value="5">5 km</option>
+                    <option value="10">10 km</option>
+                    <option value="30">30 km</option>
+                    <option value="50">50 km</option>
+                    <option value="100">100 km</option>
+                    <option value="200">200 km</option>
+                </select>
+            </fieldset>
+            <fieldset>
+                <label for="prices" id="pricesLabel">Definir rango precios</label>
+                <input type="checkbox" id="prices" name="prices" />
+                <!-- https://codepen.io/joosts/pen/rNLdxvK -->
+                <div class="min-max-slider" data-legendnum="2">
+                    <label for="min">Minimum price</label>
+                    <input id="min" class="min" name="min" type="range" step="1" min="0" max="3000" />
+                    <label for="max">Maximum price</label>
+                    <input id="max" class="max" name="max" type="range" step="1" min="0" max="3000" />
+                </div>
+            </fieldset>
+            <button type="button" id="restButton" name="restButton">
+                Obtener productos
+            </button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <script src="js/slider.js"></script>
+    <script>
+        // URL de la API
+        const apiUrl = 'https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest&distance_in_km=1'; // Cambia esta URL a la correcta
+
+        // Inicializa el mapa
+        const key = 'FarArRCYRxNEd0LV6d95';
+        const map = new maplibregl.Map({
+            container: 'map', // ID del contenedor
+            style: 'https://api.maptiler.com/maps/streets/style.json?key=' + key, // URL de estilo de MapLibre
+            center: [-0.51, 38.38], // Coordenadas iniciales [longitud, latitud]
+            zoom: 12 // Nivel de zoom inicial
+        });
+
+        // Añadir controles de zoom y rotación al mapa
+        map.addControl(new maplibregl.NavigationControl());
+
+
+        // Función para agregar puntos al mapa
+        function addMarkersToMap(products) {
+            console.log(products[1]);
+            products.forEach(product => {
+                const el = document.createElement('div');
+                el.className = 'marker';
+
+                const marker = new maplibregl.Marker()
+                    .setLngLat([product.location.longitude, product.location.latitude])
+                    .setPopup(new maplibregl.Popup({ offset: 25 }) // Añadir un popup
+                        .setHTML(`
+                            <div class="popup-content">
+                                <h3>${product.title}</h3>
+                                <p>${product.description}</p>
+                                <p><strong>Precio:</strong> ${product.price.amount} ${product.price.currency}</p>
+                                <img src="${product.images[0].urls.small}" alt="${product.title}" width=220/>
+                            </div>
+                        `))
+                    .addTo(map);
+
+            });
+        }
+
+        function addCategories(categories) {
+            categories.forEach(category => {
+                var ul = document.getElementById("category");
+                ul.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+            });
+        }
+
+        document.body.onload = function () {
+            const catUrl = 'https://api.wallapop.com/api/v3/categories';
+
+            fetch(catUrl)
+                .then(response => response.json()) // Convertir respuesta a JSON
+                .then(data => {
+                    // Mostrar resultado en la página
+                    console.log(data);
+                    const categories = data.categories; console.log(categories);
+                    addCategories(categories);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al obtener los datos');
+                });
+
+            fetch(apiUrl)
+                .then(response => response.json()) // Convertir respuesta a JSON
+                .then(data => {
+                    // Mostrar resultado en la página
+                    console.log(data);
+                    const products = data.data.section.payload.items; console.log(products);
+                    addMarkersToMap(products);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al obtener los datos');
+                });
+        }
+
+        const restButton = document.getElementById('restButton');
+        restButton.addEventListener('click', () => {
+            console.log(map.getCenter());
+            console.log(map.getCenter().lat);
+            console.log(map.getCenter().lng);
+            lat = map.getCenter().lat;
+            lng = map.getCenter().lng;
+            // select category
+            selectedCategory = document.querySelector('#category');
+            output = selectedCategory.value;
+            console.log(output);
+            // select category
+            selectedDistance = document.querySelector('#distance_in_km');
+            output2 = selectedDistance.value;
+            console.log(output2);
+            palabras = document.getElementById("keywords").value;
+            console.log(palabras);
+            console.log(document.getElementById("min").value);
+            console.log(document.getElementById("max").value);
+
+            if (document.getElementById('prices').checked) {
+                console.log('prices esta activo');
+
+            } else {
+                console.log('prices NOOOOOOOOO esta activo');
+            }
+            restUrl = encodeURI('https://api.wallapop.com/api/v3/search?source=quick_filters&keywords='+palabras+'&latitude='+lat+'&longitude='+lng+'&order_by=closest');
+            console.log(restUrl);
+            fetch(restUrl)
+                .then(response => response.json()) // Convertir respuesta a JSON
+                .then(data => {
+                    // Mostrar resultado en la página
+                    console.log(data);
+                    const products = data.data.section.payload.items; console.log(products);
+                    addMarkersToMap(products);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al obtener los datos');
+                });
+
+        });
+
+
+
+    </script>
+</body>
+
+</html>
