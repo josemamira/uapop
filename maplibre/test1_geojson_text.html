@@ -1,0 +1,2474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MapLibre con GeoJSON y Popups</title>
+    <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        .popup-content img { max-width: 200px; max-height: 200px; }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+    // Inicializa el mapa
+    const key = 'FarArRCYRxNEd0LV6d95';
+    const map = new maplibregl.Map({
+        container: 'map', // ID del contenedor
+        style: 'https://api.maptiler.com/maps/streets/style.json?key='+key, // URL de estilo de MapLibre
+        center: [-0.51, 38.38], // Coordenadas iniciales [longitud, latitud]
+        zoom: 12 // Nivel de zoom inicial
+    });
+
+    // Añadir controles de zoom y rotación al mapa
+    map.addControl(new maplibregl.NavigationControl());
+
+    // Fichero GeoJSON con los puntos
+    const geojson = {
+  "type": "FeatureCollection",
+  "features": [
+  
+   {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.506275,
+          38.373963
+        ]
+      },
+      "properties": {
+        "id": "36e1v9p78yjd",
+        "user_id": "e65vm53002jo",
+        "title": "Memoria ordenador port\u00e1til ",
+        "description": "Memoria para ordenador port\u00e1til antiguo (2 GB). Dos m\u00f3dulos de 1 GB cada uno. \n- Samsung 2Rx8 PC2-5300S-555-12-E3.",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/3x/__/c10420p1043224315/i5095165567.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.520043,
+          38.392561
+        ]
+      },
+      "properties": {
+        "id": "w674r0pk596x",
+        "user_id": "9nz0vg1kdrjo",
+        "title": "Ordenador port\u00e1til HP",
+        "description": "Port\u00e1til HP Desktop, AMD A-6 5200. Randeon HDGraohucs, 2.0 GHz.\n8 GB de RAM\nDisco duro 1TB\nWindows 10 de f\u00e1brica.\nEl \u00fanico problema es que la bater\u00eda est\u00e1 fundida y funciona con cable. En Amazon o Aliexpress est\u00e1n por 20-30 euros.\n",
+        "price": "120.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h8/6c/__/c10420p1041657804/i5086373973.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.520043,
+          38.392561
+        ]
+      },
+      "properties": {
+        "id": "wzy4owp102z5",
+        "user_id": "9nz0vg1kdrjo",
+        "title": "Nintendo switch",
+        "description": "Consola Nintendo switch, alg\u00fan ara\u00f1azo en pantalla, pero funciona perfectamente. Protectores, mando inal\u00e1mbrico y dem\u00e1s accesorios de la foto incluidos. Cambio por iPhone 12 para arriba. Tambi\u00e9n vendo un ordenador port\u00e1til HP, ver mi perfil.",
+        "price": "175.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/zm/__/c10420p1041344420/i5084728750.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.516132,
+          38.362787
+        ]
+      },
+      "properties": {
+        "id": "0j23omgq9m6y",
+        "user_id": "4w67k9nmr8zx",
+        "title": "Ordenador port\u00e1til packardbell",
+        "description": "En perfecto estado, funciona todo bien ah\u00ed en las fotos esta la descripci\u00f3n de los datos, bater\u00eda funciona correctamente con cable y sin cable, precio negociable si est\u00e1s interesado ",
+        "price": "130.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/eh/da/__/c10420p875700311/i3145430518.jpg?pictureSize=W320",
+        "postal_code": "03005",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.520589,
+          38.395661
+        ]
+      },
+      "properties": {
+        "id": "pzp2kn5wdmj3",
+        "user_id": "e65vgnerkmjo",
+        "title": "Ordenador port\u00e1til peque\u00f1o ",
+        "description": "Ordenador port\u00e1til peque\u00f1o acer Aspire one",
+        "price": "20.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gp/ke/__/c10420p1010401526/i4916829883.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.510537,
+          38.394139
+        ]
+      },
+      "properties": {
+        "id": "pzp2grq27lj3",
+        "user_id": "xpzpd0ddpkz3",
+        "title": "Mando de portatil",
+        "description": "mando de ordenador",
+        "price": "5.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gv/qa/__/c10420p1020753502/i4976843227.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.517725,
+          38.391821
+        ]
+      },
+      "properties": {
+        "id": "pzp250g80mj3",
+        "user_id": "p8j3yeqpo869",
+        "title": "Boombox JVC, PC X100",
+        "description": "Equipo m\u00fasica port\u00e1til JVC vintage, funcionamiento a Red o pilas, JVC PC X100, altavoces extra\u00edbles. ",
+        "price": "80.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h8/45/__/c10420p1041555926/i5085907691.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.518188,
+          38.3964
+        ]
+      },
+      "properties": {
+        "id": "wzy44pl2qpz5",
+        "user_id": "mznl2vp87yjn",
+        "title": "Ordenador port\u00e1til ",
+        "description": "Acer Aspire 5750 series con Windows 10 \n500 gb memoria, 4 gb ram \nVendo PC totalmente funcional con todas las caracter\u00edsticas que puedes encontrar en la imagen,\nVendo con cargador.\nEl PC es un poco lento dada su antig\u00fcedad, pero funciona bien para navegar, etc.\nbater\u00eda que debe reemplazarse porque ya no tiene carga.",
+        "price": "95.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gj/rn/__/c10420p1000661992/i4862208103.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.501244,
+          38.368408
+        ]
+      },
+      "properties": {
+        "id": "x6qmney905jy",
+        "user_id": "p8j3515qxlz9",
+        "title": "Porta ordenadores",
+        "description": "Porta port\u00e1tiles nuevo sin estrenar de 42 cm x 32 cm con varios compartimentos y cinta bandolera, buena calidad de fabricaci\u00f3n ",
+        "price": "15.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/vb/__/c10420p1041142966/i5083720001.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.514989,
+          38.39476
+        ]
+      },
+      "properties": {
+        "id": "pzp27re0w5j3",
+        "user_id": "xpzp9g9r1l63",
+        "title": "Base Refrigeradora para Port\u00e1til ",
+        "description": "Base gaming con refrigeraci\u00f3n para ordenador port\u00e1til con muy poco uso.",
+        "price": "15.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/z1/__/c10420p1044677026/i5106172613.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.523921,
+          38.390174
+        ]
+      },
+      "properties": {
+        "id": "w674ko2xo56x",
+        "user_id": "wzynqe9vm2j5",
+        "title": "Lenovo Legion - Portatil Gaming",
+        "description": "En perfecto estado y funcionamiento a la perfecci\u00f3n. El Lenovo Legion es un ordenador port\u00e1til dise\u00f1ado para ofrecer un rendimiento excepcional tanto en juegos como en tareas exigentes.\n\nCaracteristicas Principales:\n\n\u2705Almacenamiento: 1TB de SSD.\n\u2705Procesador (CPU): Intel Core i7-10750H.\n\u2705Tarjeta Gr\u00e1fica: Nvidia GeForce GTX 1650. \n\u2705Memoria RAM: 16 GB.\n\u2705Sistema Operativo: Windows 11 Home.\n\u2705Pantalla: 120Hz de tasa de refresco.\n\nAccesorios de Regalo:\n\n\ud83c\udf81Base de Ventiladores con RGB.\n\ud83c\udf81Rat\u00f3n Logitech Inal\u00e1mbrico.\n\ud83c\udf81Funda Protectora.\n\n\ud83d\udeab Solo entrega en mano, no hago env\u00edos.\n\ud83d\udeab No hago intercambios.",
+        "price": "800.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h3/2b/__/c10420p1033071976/i5039187018.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.500402,
+          38.362098
+        ]
+      },
+      "properties": {
+        "id": "pj9med75dm6e",
+        "user_id": "7v6gewo0y2ze",
+        "title": "Funda ordenador Bimba y Lola",
+        "description": "Funda para port\u00e1til Bimba y Lola. Sin estrenar, conserva la etiqueta, funda atrapapolvo y bolsa original. Ideal para macbook.\nMedidas: 26 x 35 cm\n#bimbaylola",
+        "price": "40.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/5t/__/c10420p1043313413/i5095482452.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.515619,
+          38.399622
+        ]
+      },
+      "properties": {
+        "id": "wzv40kx0yrzl",
+        "user_id": "qzm9l7yg5x6v",
+        "title": "Ordenador portatil HP",
+        "description": "portatil en perfecto estado, de no usarlo va un poco lento, por lo demas en perfectas condiciones \n\nProcesador A4-9125 @ 2,3GHz 2 n\u00facleos\nSDRAM 8 GB DDR4 x1\n1000 GB HDD de almacenamiento\nGr\u00e1fica integrada AMD Radeon R3",
+        "price": "140.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gw/zc/__/c10420p1022856241/i4987324885.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.51616,
+          38.389904
+        ]
+      },
+      "properties": {
+        "id": "v6ggvevln56e",
+        "user_id": "owzyx190565g",
+        "title": "Soporte para port\u00e1til ",
+        "description": "Se vende soporte kensington para port\u00e1til ,muy practico y buen estado.\n",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/wu/__/c10420p1046253616/i5114931983.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.51616,
+          38.389904
+        ]
+      },
+      "properties": {
+        "id": "0j24eqe31mzy",
+        "user_id": "owzyx190565g",
+        "title": "Base refrigerante para portatil",
+        "description": "En buen estado ,,bases para refrigerar los port\u00e1tiles.",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/wn/__/c10420p1046244311/i5114829692.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.53314,
+          38.398864
+        ]
+      },
+      "properties": {
+        "id": "wzy4x8w825z5",
+        "user_id": "9nz0vy324vjo",
+        "title": "MALETA ADOLFO DOMIN ORDENADOR PORT\u00c1TIL ",
+        "description": "Maleta Adolfo Dom\u00ednguez para ordenador port\u00e1til, aparatos electr\u00f3nicos varios, multibolsillos, cremalleras, velcros, y cierres en perfecto estado, sin uso.\nMedidas en las fotos, hago env\u00edos.",
+        "price": "15.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gx/xj/__/c10420p1024450468/i4995735432.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.53314,
+          38.398864
+        ]
+      },
+      "properties": {
+        "id": "8z8k8y42r1z3",
+        "user_id": "9nz0vy324vjo",
+        "title": "MALETA ORDENADOR PORT\u00c1TIL ",
+        "description": "Maleta ordenador port\u00e1til, m\u00faltiples bolsillos y departamentos interiores, apenas usada, color rosa.\nMedidas: 30X40",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gp/wu/__/c10420p1010982194/i4920636316.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.497099,
+          38.381056
+        ]
+      },
+      "properties": {
+        "id": "ejk8dvowkqjx",
+        "user_id": "8j3yx8wnyy69",
+        "title": "Laptop HP 650",
+        "description": "Hp 650, Intel Celeron,  1,80HGz, 64bits\nSistema Operativo: Windows 10 \n\nCable de corriente incluido, lector DVD\nPantalla intacta y teclado funciona perfecto \nTiene a\u00f1os pero funciona. Lo vendo porque pronto tendr\u00e9 otro. \n\n- Bater\u00eda para cambiar, estado visual \u00f3ptimo. \n- signos de uso en el panel t\u00e1ctil del rat\u00f3n. \n",
+        "price": "95.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h8/lh/__/c10420p1042364271/i5090544269.jpg?pictureSize=W320",
+        "postal_code": "03011",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.515565,
+          38.406165
+        ]
+      },
+      "properties": {
+        "id": "mzn204dmqgzn",
+        "user_id": "v4z4kmmq2vjy",
+        "title": "Port\u00e1til ASUS X555LJ (con mejoras)",
+        "description": "Ordenador port\u00e1til ASUS X555LJ en muy buen estado. Soy inform\u00e1tico desde hace m\u00e1s de 15 a\u00f1os y durante alg\u00fan tiempo fue mi port\u00e1til personal, por lo que est\u00e1 muy mimado y tiene algunas mejoras:\n- Procesador Intel Core i5 5200U (2 n\u00facleos / 4 hilos)\n- RAM 8GB DDR4 (ven\u00eda con 4GB y lo ampli\u00e9 a 8)\n- Gr\u00e1ficos dedicados NVIDIA 920M + Intel HD Graphics 5200\n- Disco duro principal SSD de 128GB + disco duro secundario mec\u00e1nico de 1TB (este \u00faltimo ocupando la bah\u00eda del lector de CD/DVDs)\n- S.O. Windows 11 Home reci\u00e9n instalado\n\nIdeal para ofim\u00e1tica o gaming low specs (LoL, por ejemplo)\n\nSe puede ver/probar o puedo mandar videos.",
+        "price": "250.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gz/ph/__/c10420p1027434601/i5010671827.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.527455,
+          38.398224
+        ]
+      },
+      "properties": {
+        "id": "36e1od4pwnjd",
+        "user_id": "lqzm1vqd4xzv",
+        "title": "Filtro pantalla",
+        "description": "Filtro de confidencialidad para ordenador. \nNuevo. \n",
+        "price": "3.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h4/mm/__/c10420p1035698739/i5054847398.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.514092,
+          38.40111
+        ]
+      },
+      "properties": {
+        "id": "4z4e10qgqmjy",
+        "user_id": "8j3m2rnwdy69",
+        "title": "PORT\u00c1TIL LENOVO THINKPAD I7 8GB RAM SSD 240GB",
+        "description": "ORDENADOR PORT\u00c1TIL LENOVO THINKPAD I7 8GB RAM SSD 240GB - PANTALLA 15,6\" FUNCIONA PERFECTAMENTE - La bater\u00eda ser\u00eda conveniente cambiarla.",
+        "price": "160.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gd/b5/__/c10420p989814186/i4799976377.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.524147,
+          38.404081
+        ]
+      },
+      "properties": {
+        "id": "qzmepdyx8ljv",
+        "user_id": "3zlgkg0yy8jx",
+        "title": "Protector pantalla 15.6\" nuevo",
+        "description": "Protector nunca usado. \nFiltro de privacidad",
+        "price": "3.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h2/ya/__/c10420p1032883580/i5038379386.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.501134,
+          38.360407
+        ]
+      },
+      "properties": {
+        "id": "9jdkelx5wd6k",
+        "user_id": "mznl08k1o0jn",
+        "title": "Malet\u00edn ordenador port\u00e1til azul",
+        "description": "Malet\u00edn para ordenador port\u00e1til color azul oscuro",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h3/ik/__/c10420p1033829712/i5042903409.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.501134,
+          38.360407
+        ]
+      },
+      "properties": {
+        "id": "qjw4q0n89ezo",
+        "user_id": "mznl08k1o0jn",
+        "title": "Mochila para ordenador port\u00e1til azul",
+        "description": "Maletin ordenador port\u00e1til ",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h3/8c/__/c10420p1033352905/i5040357472.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.501134,
+          38.360407
+        ]
+      },
+      "properties": {
+        "id": "mzn20dx10kzn",
+        "user_id": "mznl08k1o0jn",
+        "title": "Malet\u00edn ordenador port\u00e1til lila",
+        "description": "Malet\u00edn para ordenador port\u00e1til o/y documentos ",
+        "price": "15.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h3/8c/__/c10420p1033353449/i5040360005.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.499679,
+          38.363527
+        ]
+      },
+      "properties": {
+        "id": "9jdkvn4k426k",
+        "user_id": "g0j20gx8qv6y",
+        "title": "Mochila para port\u00e1til ",
+        "description": "mochila para guardar portatil",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/pu/__/c10420p1045927012/i5113298684.jpg?pictureSize=W320",
+        "postal_code": "03010",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.488755,
+          38.369136
+        ]
+      },
+      "properties": {
+        "id": "pzp2k31xg5j3",
+        "user_id": "8z8qyrrvkoz3",
+        "title": "Lector de DVD ordenador",
+        "description": "3 unidades de portatil y 8 de sobremesa a 5e cada uno. Todos conexion por sata. Mas info contactad.",
+        "price": "5.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gn/qd/__/c10420p1007321098/i4901244762.jpg?pictureSize=W320",
+        "postal_code": "03011",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.524088,
+          38.399332
+        ]
+      },
+      "properties": {
+        "id": "wzy44nxy3vz5",
+        "user_id": "436e1por2njd",
+        "title": "Ordenador port\u00e1til Lenovo Ideapad 330",
+        "description": "2 a\u00f1os de antig\u00fcedad\nWindows 11 Licencia\nProgramas esenciales\nIntel core i5 8th gen\n8GB memoria RAM\nDisco duro NVMe 256 GB\nUltra slim\nBater\u00eda 100%\nAlimentador original Lenovo\n\nPuesto a punto. 6 meses de garant\u00eda.\n\nPrecio no negociable. No acepto cambios. Gracias!\n\n",
+        "price": "350.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gh/20/__/c10420p996106692/i4834922456.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.509414,
+          38.404884
+        ]
+      },
+      "properties": {
+        "id": "8z8k2y3yodz3",
+        "user_id": "nzx55qeeqe62",
+        "title": "Mochila para port\u00e1til Antler 33x43",
+        "description": "Mochila para port\u00e1til 43 cm ancho x 33 alto",
+        "price": "5.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h4/8v/__/c10420p1035058146/i5050668672.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.530768,
+          38.399776
+        ]
+      },
+      "properties": {
+        "id": "e658qw090p6o",
+        "user_id": "08z8qxlyvdz3",
+        "title": "Ordenador portatil ",
+        "description": "Ordenador portatil Laptop Lenovo Ideapad 1 15ALC7 AMD Ryzen 7 5700U 1.80Ghz 8gb ram ddr4. 512GB SSD Pantalla 15.6\" full hd. ultra slim. Windows 11 original. Radeon Graphics. bluetooth. usb 3.2. usb-C 3.2. TOP SECOND\ncomo nuevo. somos tienda y damos garant\u00eda. \n",
+        "price": "350.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gp/nd/__/c10420p1010540072/i4917413678.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.530768,
+          38.399776
+        ]
+      },
+      "properties": {
+        "id": "nz042kndl3jo",
+        "user_id": "08z8qxlyvdz3",
+        "title": "Ordenador portatil HP",
+        "description": "Ordenador Port\u00e1til HP 255 G7 15.6\" procesador AMD Ryzen 3 3200U 2.60Ghz. 8gb de ram y disco duro ssd 250GB. Lector grabador de DVD. Hdmi.webcam. Windows 11.estado impecable. Somos tienda. Top Second. ",
+        "price": "250.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h8/1b/__/c10420p1041423903/i5085062321.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.530768,
+          38.399776
+        ]
+      },
+      "properties": {
+        "id": "8z8kw7xx4rz3",
+        "user_id": "08z8qxlyvdz3",
+        "title": "Ordenador portatil HP",
+        "description": "Ordenador portatil Laptop HP 15s-eq1042ns AMD Athlon Silver 3050U 8gb de ram ddr4.disco duro ssd 512gb M.2 pantalla 15.6\" gr\u00e1fica AMD Radeon. Usb 3.2. Hdmi. Como nuevo.con Windows 11. Somos tienda y damos garant\u00eda. \nTop Second\nC/Doctor Fleming 37\nSan Vicente del Raspeig (Alicante)\n966143292/637653650",
+        "price": "300.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gy/qm/__/c10420p1025807722/i5001527974.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.530768,
+          38.399776
+        ]
+      },
+      "properties": {
+        "id": "4z4eq5nqxljy",
+        "user_id": "08z8qxlyvdz3",
+        "title": "Ordenador portatil Lenovo",
+        "description": "Ordenador portatil Lenovo V130-15IKB pantalla Led 15.6\" fhd. Procesador Intel i5 7200U 2.50Ghz 2.71 Ghz 8gb de ram. Disco duro M2 Ssd 250gb. Hdmi.webcam Windows 10.somos tienda Top Second. ",
+        "price": "230.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h3/dl/__/c10420p1033598438/i5041549144.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.530768,
+          38.399776
+        ]
+      },
+      "properties": {
+        "id": "pzp2w0w2v5j3",
+        "user_id": "08z8qxlyvdz3",
+        "title": "Ordenador portatil Lenovo AMD",
+        "description": "Ordenador Port\u00e1til Lenovo Ideapad 1 15ALC7. Pantalla Led full hd 15.6\". Procesador AMD Ryzen 7 5700U Radeon Graphics. 8gb de ram. Disco duro ssd 512gb.usb type c.web cam.como nuevo.dise\u00f1o ultra slim.windows 11.somos tienda Top Second. ",
+        "price": "350.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h3/du/__/c10420p1033610098/i5041605561.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.530768,
+          38.399776
+        ]
+      },
+      "properties": {
+        "id": "nzx4q2qoo1j2",
+        "user_id": "08z8qxlyvdz3",
+        "title": "Ordenador portatil 13\" Lenovo",
+        "description": "Ordenador portatil Lenovo Thinkpad x250. Pantalla 13\" Procesador Intel i5 5300U 2.30Ghz 4 Gb de ram ampliable.disco duro s\u00f3lido SSD 128Gb. Windows.10 salida VGA  y Display port.webcam. somos tienda.Top Second. ",
+        "price": "160.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h3/e1/__/c10420p1033619278/i5041653320.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.48844,
+          38.365589
+        ]
+      },
+      "properties": {
+        "id": "4z4ekk0vp8jy",
+        "user_id": "p8j3e0do7z93",
+        "title": "Ordenador port\u00e1til HP ",
+        "description": "Ordenador port\u00e1til HP de 15\" bastante usado como se puede ver en las fotos pero funcionando bien.\n\nProcesador: intel core i3-6006U CPU 2.00GHz \nRAM: 8 GB\nDisco duro: 500GB\nSistema operativo de 64 bits con Windows 10 Pro\n",
+        "price": "50.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/9n/__/c10420p1046851686/i5117865979.jpg?pictureSize=W320",
+        "postal_code": "03010",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.48844,
+          38.365589
+        ]
+      },
+      "properties": {
+        "id": "nzx499r0emj2",
+        "user_id": "p8j3e0do7z93",
+        "title": "Funda ordenador port\u00e1til ",
+        "description": "Bolsa malet\u00edn para port\u00e1til de 15\" o para cualquier otro uso.\nBastante usada, se ve en las fotos, pero a\u00fan puede dar mucha guerra.\nTiene varios bolsillos para guardar un mont\u00f3n de cosas!\nComprada en parfois.",
+        "price": "20.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/9o/__/c10420p1046852506/i5117869768.jpg?pictureSize=W320",
+        "postal_code": "03010",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.48619,
+          38.369964
+        ]
+      },
+      "properties": {
+        "id": "e658er85og6o",
+        "user_id": "lqzm41259gzv",
+        "title": "Laptop 15.6\"6GB RAM 256GB SSD 5G W11",
+        "description": "Nuevo a Estrenar!\nEste port\u00e1til de 15.6 pulgadas cuenta con Windows 11, es ligero (1,63 kg) y tiene una pantalla Full HD. Ofrece una bater\u00eda de 5000 mAh con hasta 6 horas de reproducci\u00f3n de video y conectividad r\u00e1pida mediante WiFi 2.4G/5G y Bluetooth 4.2. Dispone de 6 GB de RAM, un SSD de 256 GB (expandible a 1 TB) y un procesador Quad-Core J4105, lo que permite multitarea eficiente. Incluye servicio t\u00e9cnico VIP y soporte con teclado en espa\u00f1ol. Ideal para trabajo, estudio y entretenimiento.\n",
+        "price": "120.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/24/__/c10420p1046499700/i5116248986.jpg?pictureSize=W320",
+        "postal_code": "03014",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.521404,
+          38.405051
+        ]
+      },
+      "properties": {
+        "id": "pzp2wprxxmj3",
+        "user_id": "8ejkr24x716x",
+        "title": "L\u00e1mpara port\u00e1til Led ",
+        "description": "L\u00e1mpara Led peque\u00f1a con 3 niveles de intensidad de luz . Para uso de ordenador , estudio ",
+        "price": "3.5 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h3/jk/__/c10420p1033877126/i5043158021.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.516748,
+          38.357832
+        ]
+      },
+      "properties": {
+        "id": "nzx4y517o5j2",
+        "user_id": "436eook7gqzd",
+        "title": "Funda Ordenador",
+        "description": "\"Protege tu preciado port\u00e1til con esta elegante funda de cuero sint\u00e9tico resistente al agua. Esta funda, dise\u00f1ada para ordenadores de 15 y 16 pulgadas compatible con el MacBook M2 , ofrece una protecci\u00f3n fiable y un estilo sofisticado. El material de cuero sint\u00e9tico asegura durabilidad y resistencia al agua, manteniendo tu dispositivo a salvo de salpicaduras y peque\u00f1as lluvias. Con un dise\u00f1o funcional, esta funda es la elecci\u00f3n perfecta para transportar tu port\u00e1til con estilo y seguridad a dondequiera que vayas.\"",
+        "price": "8.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/g7/oz/__/c10420p980381306/i4744070162.jpg?pictureSize=W320",
+        "postal_code": "03005",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    
+    
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.51367,
+          38.391623
+        ]
+      },
+      "properties": {
+        "id": "vjrqxxpld9zk",
+        "user_id": "4w67deq5v76x",
+        "title": "Bicicleta Ghost SL AMR 6.9 talla L ",
+        "description": "Bicicleta Ghost SL AMR 6.9, cuadro carbono y basculante de aluminio \nModelo 2018\nSuspensiones 130mm RockSock\nMuchos extras: cubiertas 2.5/2.6 bontrager tubeless, frenos XT, 12v SRAM GX electr\u00f3nico, ruedas a la carta Dr.wheel\nSe podr\u00eda negociar precio cambiando algunos extras por las piezas de origen o similares (ruedas inferiores y cambio cl\u00e1sico principalmente).\nTija telesc\u00f3pica \nMantenimiento al d\u00eda\nFactura de compra \nNo la regalo, no me urge, no cambios,si no saco un importe decente se queda en el garaje, porque funciona de maravilla, cero crujidos, cero problemas \nPrecio sin ruedas DrWheel: 1550\nPrecio sin ruedas ni cambio: 1400",
+        "price": "2000.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/as/__/c10420p1046904819/i5118179975.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.517272,
+          38.391766
+        ]
+      },
+      "properties": {
+        "id": "p614el0qgx65",
+        "user_id": "owzy79q2eez5",
+        "title": "Specialized Safire",
+        "description": "Bicicleta mtb Specialized Safire, perfecto estado, suspensiones Fox. Ruedas 26\", talla S.",
+        "price": "550.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/7d/__/c10420p1040026655/i5077610942.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.501108,
+          38.380897
+        ]
+      },
+      "properties": {
+        "id": "0j24ew1qnvzy",
+        "user_id": "kp61yvm0o565",
+        "title": "Bicicleta Specialiced Monta\u00f1a",
+        "description": "Vendo bicicleta Specialized Chisel Comp,comprada este a\u00f1o, cuadro en aluminio smartweld, talla L, horquilla Rock Shox judy gold, ruedas aluminio specialized, cubiertas tubelizadas, frenos Sram Level T, tramsmision Sram NX, perifericos Aluminio Specialized, regalo los dos portabidones y bomba de mano, bicicleta con poco uso y todo por pista y asfalto, con papeles de compra y garantia. ( Solo vendo en Persona ).",
+        "price": "800.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/ax/__/c10420p1043551483/i5096972591.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.515452,
+          38.399646
+        ]
+      },
+      "properties": {
+        "id": "xzo2dwvdv569",
+        "user_id": "dqjwemx8nejo",
+        "title": "Bici paseo ciudad y camino",
+        "description": "Bici de paso, ciudad y camino. Cuadro de bicicleta de MTB BH Aluminio, arenado y pintado al horno (pintura resistente al Sol y ambiente exterior). Con suspensi\u00f3n delantera. Componentes Shimano. 21 velocidades, Llantas 26\" neum\u00e1ticos Continental Retroride. Manillar, frenos, etc de Aluminio. Guardabarros metalicos y porta bultos con luz de Led y pinza. Con timbre y posibilidad de espejo retrovisor. Muy ligera y c\u00f3moda. Funciona perfectamente.",
+        "price": "150.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h6/w4/__/c10420p1039501533/i5075170407.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.513297,
+          38.391671
+        ]
+      },
+      "properties": {
+        "id": "nz04wvoxp7jo",
+        "user_id": "v4z402oykm6y",
+        "title": "Bicicleta Fat Bike Stevens Mobter",
+        "description": "Stevens Faty mobter aluminio,shimano XT  y deore 10 x 2 muy poco uso.",
+        "price": "380.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gv/jk/__/c10420p1020439727/i4975453594.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.495506,
+          38.368453
+        ]
+      },
+      "properties": {
+        "id": "pzp275xkykj3",
+        "user_id": "qjwy2kqywgzo",
+        "title": "Bicicleta MTB El\u00e9ctrica E-Expl 520 Azul Noche Semirr\u00edgida",
+        "description": "Talla: l - 175-184cm\nMarca: ROCKRIDER\nS\u00d3LO disponible para comprar y recoger en la tienda Decathlon.\nPRODUCTO SALDO: procede de exposiciones o devoluciones. Revisado y garantizado por Decathlon.\nGarant\u00eda de 3 a\u00f1os. Se aceptan devoluciones, no cambios. Se puede financiar.",
+        "price": "1900.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/4d/__/c10420p1046604702/i5116776908.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.495506,
+          38.368453
+        ]
+      },
+      "properties": {
+        "id": "pj9mer0m9v6e",
+        "user_id": "qjwy2kqywgzo",
+        "title": "Bicicleta MTB El\u00e9ctrica E-Expl 520 Azul Noche Semirr\u00edgida",
+        "description": "Talla: m - 165-174cm\nMarca: ROCKRIDER\nS\u00d3LO disponible para comprar y recoger en la tienda Decathlon.\nPRODUCTO SALDO: procede de exposiciones o devoluciones. Revisado y garantizado por Decathlon.\nGarant\u00eda de 3 a\u00f1os. Se aceptan devoluciones, no cambios. Se puede financiar.",
+        "price": "1850.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/4d/__/c10420p1046604537/i5116776138.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.495506,
+          38.368453
+        ]
+      },
+      "properties": {
+        "id": "e658erd3o06o",
+        "user_id": "qjwy2kqywgzo",
+        "title": "Bicicleta de monta\u00f1a MTB  29\" aluminio Rockrider Explore 500",
+        "description": "Talla: xl - 185-200cm\nMarca: ROCKRIDER\nS\u00d3LO disponible para comprar y recoger en la tienda Decathlon.\nPRODUCTO SALDO: procede de exposiciones o devoluciones. Revisado y garantizado por Decathlon.\nGarant\u00eda de 3 a\u00f1os. Se aceptan devoluciones, no cambios. Se puede financiar.",
+        "price": "400.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/4c/__/c10420p1046603396/i5116770084.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.495506,
+          38.368453
+        ]
+      },
+      "properties": {
+        "id": "pzp27wdrg5j3",
+        "user_id": "qjwy2kqywgzo",
+        "title": "Bicicleta ni\u00f1os 20 Pulgadas MTB Rockrider ST 120 Blanco",
+        "description": "Talla: 20\"\nMarca: BTWIN\nS\u00d3LO disponible para comprar y recoger en la tienda Decathlon.\nPRODUCTO SALDO: procede de exposiciones o devoluciones. Revisado y garantizado por Decathlon.\nGarant\u00eda de 3 a\u00f1os. Se aceptan devoluciones, no cambios. Se puede financiar.",
+        "price": "150.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/vg/__/c10420p1046189002/i5114342824.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.495506,
+          38.368453
+        ]
+      },
+      "properties": {
+        "id": "8z8ke1ednrz3",
+        "user_id": "qjwy2kqywgzo",
+        "title": "Bicicleta MTB XC Cross Country Race 700 S Azul Cuadro",
+        "description": "Talla: m - 165-174cm\nMarca: ROCKRIDER\nS\u00d3LO disponible para comprar y recoger en la tienda Decathlon.\nPRODUCTO SALDO: procede de exposiciones o devoluciones. Revisado y garantizado por Decathlon.\nGarant\u00eda de 3 a\u00f1os. Se aceptan devoluciones, no cambios. Se puede financiar.",
+        "price": "1330.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/j1/__/c10420p1043930122/i5100549240.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.495506,
+          38.368453
+        ]
+      },
+      "properties": {
+        "id": "nzx4mp7kd7j2",
+        "user_id": "qjwy2kqywgzo",
+        "title": "Maneta Cambios Bicicleta MTB 10 Velocidades Shimano Deore",
+        "description": "Marca: SHIMANO\nS\u00d3LO disponible para comprar y recoger en la tienda Decathlon.\nPRODUCTO SALDO: procede de exposiciones o devoluciones. Revisado y garantizado por Decathlon.\nGarant\u00eda de 3 a\u00f1os. Se aceptan devoluciones, no cambios. Se puede financiar.",
+        "price": "15.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/7s/__/c10420p1040046354/i5077713548.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.495506,
+          38.368453
+        ]
+      },
+      "properties": {
+        "id": "8z8krx5rxoz3",
+        "user_id": "qjwy2kqywgzo",
+        "title": "Bicicleta el\u00e9ctrica MTB Rockrider E-ST 100 Blanco Rojo 27,5\"",
+        "description": "Talla: m - 165-174cm\nMarca: ROCKRIDER\nS\u00d3LO disponible para comprar y recoger en la tienda Decathlon.\nPRODUCTO SALDO: procede de exposiciones o devoluciones. Revisado y garantizado por Decathlon.\nGarant\u00eda de 3 a\u00f1os. Se aceptan devoluciones, no cambios. Se puede financiar.",
+        "price": "945.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h8/b3/__/c10420p1041879670/i5087493577.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.495506,
+          38.368453
+        ]
+      },
+      "properties": {
+        "id": "36e1or04vyjd",
+        "user_id": "qjwy2kqywgzo",
+        "title": "Bicicleta MTB El\u00e9ctrica E-Expl 520 Azul Noche Semirr\u00edgida",
+        "description": "Talla: l - 175-184cm\nMarca: ROCKRIDER\nS\u00d3LO disponible para comprar y recoger en la tienda Decathlon.\nPRODUCTO SALDO: procede de exposiciones o devoluciones. Revisado y garantizado por Decathlon.\nGarant\u00eda de 3 a\u00f1os. Se aceptan devoluciones, no cambios. Se puede financiar.",
+        "price": "1900.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/7r/__/c10420p1040044315/i5077704038.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.514478,
+          38.394443
+        ]
+      },
+      "properties": {
+        "id": "wzv4qx39d1zl",
+        "user_id": "mznl3n2m07jn",
+        "title": "Collective C2",
+        "description": "Revision cada 6 meses \u2705\nLas cubiertas estan nuevas se las quite y le puse otras.\nLa bici tiene marcas de uso. \u2757\ufe0fcambio por moto de 49cc , Bici de enduro o descenso \u2757\ufe0f\n\u2757\ufe0fESCUCHO OFERTAS \u2757\ufe0f\n\nNo leer : bici caballitos , bici mtb , bici para wheelies",
+        "price": "650.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h4/6t/__/c10420p1034961741/i5049994210.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.50485,
+          38.402546
+        ]
+      },
+      "properties": {
+        "id": "36e1oqdr1vjd",
+        "user_id": "qjwyepk5rqzo",
+        "title": "BICI CANNONDALE",
+        "description": "Se vende cannondale prophet lleva todos los mantenimientos al dia y muchos extras ideal para hacer rutas ya que es muy ligera.\n\n-Horquilla fox talas 120mm-150mm ajustable en recorrido, comprensi\u00f3n, rebote y bloqueo.\n-Amortiguador fox float rp23 regulable en compresi\u00f3n y rebote con propedal.\n-Frenos hidr\u00e1ulicos shimano slx cambiados hace poco y con pastillas nuevas.\n-Llantas mavic cross.\n-Cambio sram\n-Potencia de 31.8mm\n-Manillar de 76cm\n-Y muchos mas extras\n\n-Cualquier duda oreguntar sin compromiso.\n-Mejor ver y probar en persona.\n\n-Palabras clave: mtb enduro specialized bicicleta btt trek cannondale orbea mondraker giant lapierre canyon ",
+        "price": "500.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h8/uo/__/c10420p1042793987/i5092594268.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.50485,
+          38.402546
+        ]
+      },
+      "properties": {
+        "id": "v6gg1melr56e",
+        "user_id": "qjwyepk5rqzo",
+        "title": "Bici mtb ",
+        "description": "Vendo bicicleta de mtb, muy cuidada y con muchos extras.\n-Horquilla rockshox totem.\n-Manillar doble altura\n-Potencia de 31.8mm\n-Frenos hidraulicos\n-Ruedas en buen estado\n-Cubiertas maxxis\n-Cambio shimano\n-Pedales onoff\n\n-Cualquier duda preguntar sin compromiso.\n-Mejor ver y probar en persona.\n\n-Palabras clave: bici bicicleta mtb mountain bike enduro dh downhill freeride crosscountry shimano sram maxxis specialized btt specialized trek giant lapierre orbea mondraker kanyon",
+        "price": "450.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/g7/6x/__/c10420p979539040/i4739638595.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.494422,
+          38.393827
+        ]
+      },
+      "properties": {
+        "id": "nzx4995vdpj2",
+        "user_id": "4z4v8mv28mzy",
+        "title": "Mountain bike ",
+        "description": "50 euro cada una ",
+        "price": "50.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/8a/__/c10420p1046787854/i5117591278.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.519841,
+          38.390801
+        ]
+      },
+      "properties": {
+        "id": "0j24qn280dzy",
+        "user_id": "k3zlv8xvppjx",
+        "title": "Bicicleta rockrider st 530",
+        "description": "Perfecto estado\nTalla L",
+        "price": "265.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h1/2l/__/c10420p1029726111/i5022402818.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.498616,
+          38.373569
+        ]
+      },
+      "properties": {
+        "id": "w6744q2o5w6x",
+        "user_id": "p8j34wxd4l69",
+        "title": "Bicicleta 26\"",
+        "description": "bicicleta 26 pulgadas en muy bien estado,, no hay que hacerle nada,, tiene las dos cubiertas reci\u00e9n cambiadas y las dos c\u00e1maras nuevas, ",
+        "price": "85.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gl/af/__/c10420p1003217876/i4876417466.jpg?pictureSize=W320",
+        "postal_code": "03011",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.505885,
+          38.40385
+        ]
+      },
+      "properties": {
+        "id": "mzn2o87p00zn",
+        "user_id": "npj9g59o406e",
+        "title": "BICICLETA MTB 27'5 TALLA L",
+        "description": "COMPLETAMENTE NUEVA, 2 SALIDAS, frenos de disco, suspensi\u00f3n delantera \n\n",
+        "price": "220.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gv/pr/__/c10420p1020729249/i4976742826.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.521286,
+          38.393185
+        ]
+      },
+      "properties": {
+        "id": "v6gg7wy3e56e",
+        "user_id": "wzyld91go265",
+        "title": "Bicicleta SCOTT SPARK 26\u201d-M",
+        "description": "Cubiertas, camara y frenos nuevos,banda interior antipinchazos, en perfecto estado con marcas de uso",
+        "price": "325.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gy/j4/__/c10420p1025458216/i4999943762.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.517897,
+          38.401578
+        ]
+      },
+      "properties": {
+        "id": "9jdkne2wod6k",
+        "user_id": "dqjwp3o30qzo",
+        "title": "Vendo/cambio Bicicleta monta\u00f1a por gravel",
+        "description": "Vendo bicicleta de monta\u00f1a Giant de 27,5 pulgadas en muy buen estado. Frenos hidraulicos. Horquilla con bloqueo de amortiguaci\u00f3n. Talla XL (para 1,70 en adelante) Vendo por querer cambiar a gravel. ",
+        "price": "450.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gw/ml/__/c10420p1022261136/i4984843318.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.521857,
+          38.389525
+        ]
+      },
+      "properties": {
+        "id": "w674x5kg3w6x",
+        "user_id": "0j2y8pkmxmzy",
+        "title": "Bicicleta 29\"",
+        "description": "Bicicleta de 29\", totalmente nueva, s\u00f3lo se ha utilizado 1 vez.",
+        "price": "270.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gt/b5/__/c10420p1016687852/i4952899954.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.512236,
+          38.395128
+        ]
+      },
+      "properties": {
+        "id": "nzx490o2k5j2",
+        "user_id": "kmzn07lox2jn",
+        "title": "Bicicleta Orbea alma M50 L verde-oro",
+        "description": "Bicicleta Orbea alma M50 L verde-oro, comprada en 2020 mediados, utilizada un par de veces literalmente , esta impecable con sus cubiertas originales. \nSe regala tambien el casco que costo unos 80 euros y los accesorios que aparecen en fotos. \nCuadro de carbono . \nPedales mixtos. se puede ver y probar. \nCon la garantia activada. \nSe puede enviar video para ver mas detalladamente. ",
+        "price": "990.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/08/__/c10420p1044732578/i5106430612.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.484463,
+          38.372274
+        ]
+      },
+      "properties": {
+        "id": "wzv4k50ow7zl",
+        "user_id": "8j3mo0m4o869",
+        "title": "Bicicleta orbea",
+        "description": "bicicleta orbea  en buen estado ",
+        "price": "150.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/4u/__/c10420p1039908065/i5077042689.jpg?pictureSize=W320",
+        "postal_code": "03011",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.494921,
+          38.365135
+        ]
+      },
+      "properties": {
+        "id": "p614evk97g65",
+        "user_id": "g0j28gd5odjy",
+        "title": "Bicicleta monta\u00f1a Boomerang Atlas",
+        "description": "Bicicleta monta\u00f1a Boomerang Atlas.\nTiene muchos a\u00f1os y funciona.\n",
+        "price": "60.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h4/k5/__/c10420p1035583579/i5054363644.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.494921,
+          38.365135
+        ]
+      },
+      "properties": {
+        "id": "36e1od8358jd",
+        "user_id": "g0j28gd5odjy",
+        "title": "Bicicleta monta\u00f1a Scott Timber",
+        "description": "Bicicleta monta\u00f1a Scott timbe 4130 Cromo.\nTiene muchos a\u00f1os pero funciona.",
+        "price": "60.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h4/k4/__/c10420p1035582487/i5054357665.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.498415,
+          38.396063
+        ]
+      },
+      "properties": {
+        "id": "8j34r2k5qy69",
+        "user_id": "xzoldee2p2z9",
+        "title": "Bicicleta Rockrider",
+        "description": "Talla M, frenos hidr\u00e1ulicos, monoplato.",
+        "price": "315.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h1/n2/__/c10420p1030681034/i5027083228.jpg?pictureSize=W320",
+        "postal_code": "03112",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.526494,
+          38.394995
+        ]
+      },
+      "properties": {
+        "id": "wzy49xwqrxz5",
+        "user_id": "g0j21rvv2nzy",
+        "title": "Bicicleta de monta\u00f1a",
+        "description": "Se vende bicicleta de monta\u00f1a sin apenas uso y con frenos de disco \n. 100 euros negociables ",
+        "price": "100.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/ro/__/c10420p1046012120/i5113634112.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.522194,
+          38.39621
+        ]
+      },
+      "properties": {
+        "id": "vjrqp2o4vwzk",
+        "user_id": "9wzvy95wydzl",
+        "title": "Bici ni\u00f1o ni\u00f1a 20 \"",
+        "description": "Bicicleta ni\u00f1o/a 20\" \nToim Bike 20 Speed, llantas aluminio.\nA\u00f1os 6, 7, 8, 9 y 10.\nTel\u00e9fono 691353312\nMonta\u00f1a, MTB, llanta o ruedas 20 pulgadas, 6 marchas, etc...\nTotalmente funcional.\nUnisex, tanto para ni\u00f1o c\u00f3mo para ni\u00f1a.\nSe puede ver sin compromiso alguno.\nM\u00e1s bicicletas en mi perfil de monta\u00f1a, MTB, ciudad, urbana, mujer, hombre, ni\u00f1o, chico, ni\u00f1a, chico, etc ...\nCl\u00e1sica, vintage, retro, antigua, etc.",
+        "price": "59.7 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/iw/__/c10420p1040564467/i5081038265.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.522194,
+          38.39621
+        ]
+      },
+      "properties": {
+        "id": "4z4er90vpvjy",
+        "user_id": "9wzvy95wydzl",
+        "title": "Shimano suntrack 26\"",
+        "description": "Funciona todo correctamente, no hay que hacerle nada.\nBicicleta MTB Suntrack vintage.\nSuntrack Shimano 26\"\nTel\u00e9fono 691353312\nHombre, mujer, se\u00f1or, se\u00f1ora, juvenil, etc...\nMonta\u00f1a, MTB, porta bultos o portaequipajes, guardabarros delantero y trasero, caballete, llanta o ruedas 26 pulgadas, sill\u00f3n gel 18 marchas, etc...\nTotalmente funcional.\nUnisex, tanto para hombre c\u00f3mo para mujer.\nSe puede ver sin compromiso alguno.\nCl\u00e1sica, vintage, retro, antigua, etc...\nM\u00e1s bicicletas en mi perfil de monta\u00f1a, MTB, ciudad, urbana, mujer, hombre, ni\u00f1o, chico, ni\u00f1a, chico, etc ...",
+        "price": "59.7 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/ij/__/c10420p1040547938/i5080972893.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.527656,
+          38.387326
+        ]
+      },
+      "properties": {
+        "id": "36e11pv92vjd",
+        "user_id": "wzvy49w997zl",
+        "title": "MTB aluminio Am\u00e9rica bikes F10",
+        "description": "Se vende Mountain bike de aluminio de la marca America Bikes.\n-llantas 26\"\n-cambio Shimano Altus de 21 velocidades.\n-sill\u00edn Bassano.\n-funciona perfecta.",
+        "price": "180.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gi/9h/__/c10420p998134787/i4847759536.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.518583,
+          38.39809
+        ]
+      },
+      "properties": {
+        "id": "36e1p5rgy8jd",
+        "user_id": "xpzp1kkr29z3",
+        "title": "Bicicleta Leroc Quiro 29 modificada",
+        "description": "CUADRO 29\" M-L aluminio 6061-T6, Horquilla Leroc Rock 29\" con buje de 100mm en Positivo, DESVIADOR TRASER Shimano RD-TY200 de 7 velocidades DESVIADOR DELANTERO Microsihf FD-M20 de 3 velocidades , CAMBIO Microsihf   TS-39 de 3x7 velocidades BIELAS Prowheel , 3 platos de 24T 34T 42T CASSETTE 14T 28T  3velocidades  FRENOS Alhonga HJ-MD15 de disco tipo mec\u00e1nico  , MANGOS antideslizantes y comodos, DISCOS de di\u00e1metro 160mm, RUEDAS 29 \" de aluminio de doble pared..FUNDA de sill\u00edn de latex con memory..  PEDALES DE ALUMINIO COMPETICION, Bombona de agua , bomba de aire , cubiertas casi nuevas y PASTILLAS DE FRENO CAMBIADAS, con luces ",
+        "price": "300.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gw/4b/__/c10420p1021407439/i4979857309.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.515718,
+          38.394951
+        ]
+      },
+      "properties": {
+        "id": "v6gge3oe026e",
+        "user_id": "xpzpgw44y9z3",
+        "title": "Pedales de MTB. **(NUEVOS A ESTRENAR)**",
+        "description": "*** PEDALES NUEVOS A ESTRENAR***\nPedal de aleaci\u00f3n de aluminio para bicicleta de monta\u00f1a, accesorio antideslizante con plataforma de liberaci\u00f3n r\u00e1pida, 2 unidades. Pedales de alta calidad universalmente adecuados para bicicletas con conexi\u00f3n de 9/16 pulgadas - 14,2 mm de diametro. El Dise\u00f1o estrecho y ligero reduce la resistencia al viento y los extremos de los tornillos sobresalientes permiten un paso antideslizante. Los pedales consisten en un eje de acero con una banda de rodadura de aluminio. Material: acero inoxidable y aluminio F\u00e1cil montaje Conexi\u00f3n: 9/16 pulgadas - 14,2 mm de diametro Peso: aprox. 140g no negociable, gracias",
+        "price": "14.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h2/6m/__/c10420p1031593564/i5031257314.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.519235,
+          38.39842
+        ]
+      },
+      "properties": {
+        "id": "8z8kwd4k7oz3",
+        "user_id": "436ex1wgdnzd",
+        "title": "Bicicleta de marchas bike junior",
+        "description": "Bicicleta,cafetera bosch,bascula antigua,malet\u00edn nuevo,10 euros cada cosa ",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gy/el/__/c10420p1025246494/i4998983118.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.520707,
+          38.398107
+        ]
+      },
+      "properties": {
+        "id": "e6588dm9kk6o",
+        "user_id": "v9jd5lywn96k",
+        "title": "Bicicleta bmx mongoose expert",
+        "description": "bicicleta bmx race / pumptrack mongoose talla expert de segunda mano, tiene tipicos ara\u00f1azos de uso, pero esta revisada en tienda especializada",
+        "price": "279.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/gj/5w/__/c10420p999646672/i4856413041.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.516729,
+          38.399517
+        ]
+      },
+      "properties": {
+        "id": "x6qdpg70yejy",
+        "user_id": "mxzovrgeolj9",
+        "title": "Bicicleta MTB Kross earth 1.0",
+        "description": "se vende por no darle uso, revisi\u00f3n reci\u00e9n hecha, las bielas y el pedal es lo unico que tiene alguna marca, el resto de la bici y de la pintura est\u00e1 intacta y funciona todo perfectamente, tendr\u00e1 unos 500 km aproximadamente 15 salidas TALLA L y regalo productos para la limpieza y mantenimiento tambi\u00e9n puedo regalar alg\u00fan traje.",
+        "price": "650.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/fi/6r/__/c10420p937541442/i3492823135.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.534555,
+          38.400447
+        ]
+      },
+      "properties": {
+        "id": "9jdkvwk8pd6k",
+        "user_id": "v4z4vq20m8zy",
+        "title": "Esi Grips Racers Edge MTB Grip",
+        "description": "Esi Grips Racers Edge MTB Grip blanco. Tapones de cierre incluido, agarre ultraligero para el uso en MTB, absorben las vibraciones y golpes para obtener un mayor confort ",
+        "price": "13.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/9k/__/c10420p1045167984/i5109778480.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },      
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.519802,
+          38.383981
+        ]
+      },
+      "properties": {
+        "id": "3zl85g38026x",
+        "user_id": "dqjwdx5rekzo",
+        "title": "Lampara mesilla",
+        "description": "lampara medilla 58cm de alto",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/ky/__/c10420p1044019193/i5101472212.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.519802,
+          38.383981
+        ]
+      },
+      "properties": {
+        "id": "xzo208901769",
+        "user_id": "dqjwdx5rekzo",
+        "title": "Lampara de pie",
+        "description": "lampara de pie, 146cm de alto",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/l1/__/c10420p1044022809/i5101516266.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.503289,
+          38.383933
+        ]
+      },
+      "properties": {
+        "id": "0j24e415qnzy",
+        "user_id": "owzyr7d94v65",
+        "title": "L\u00e1mpara ",
+        "description": "L\u00e1mpara de noche. Buen estado. 10\u20ac. Urge por mudanza.",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/3i/__/c10420p1044884959/i5107646260.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.503289,
+          38.383933
+        ]
+      },
+      "properties": {
+        "id": "36e1v1o5dyjd",
+        "user_id": "owzyr7d94v65",
+        "title": "L\u00e1mpara de pie negra.",
+        "description": "L\u00e1mpara de pie negra. 10\u20ac. Urge por mudanza. ",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/3x/__/c10420p1044904363/i5107717664.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.494246,
+          38.377456
+        ]
+      },
+      "properties": {
+        "id": "pzp25nlwm5j3",
+        "user_id": "vjrdoqr8o86k",
+        "title": "Lampara de techo estilo rustico",
+        "description": "Lampara de techo forjada estilo rustico con tulipa color ambar ",
+        "price": "50.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h8/mm/__/c10420p1042418074/i5090752367.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.511697,
+          38.392487
+        ]
+      },
+      "properties": {
+        "id": "wzv43gmyndzl",
+        "user_id": "ke659nm7xgzo",
+        "title": "Lampara ba\u00f1o",
+        "description": "Plafon de ba\u00f1o con dos bombillas tipo led.\n24 cm diametro",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/dy/__/c10420p1045372141/i5110779191.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.52577,
+          38.398595
+        ]
+      },
+      "properties": {
+        "id": "36e1ve9drqjd",
+        "user_id": "8x6q4l945ejy",
+        "title": "Lampara ",
+        "description": "Lampara en perfecto estado",
+        "price": "30.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/tc/__/c10420p1046090663/i5113937782.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.510025,
+          38.386743
+        ]
+      },
+      "properties": {
+        "id": "8j34gvnn0269",
+        "user_id": "evjrq2v8d4zk",
+        "title": "L\u00e1mparas ",
+        "description": "Lampara hab juvenil y matrimonio",
+        "price": "75.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/7i/__/c10420p1043392258/i5095791263.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.506165,
+          38.391363
+        ]
+      },
+      "properties": {
+        "id": "8z8keelvldz3",
+        "user_id": "ejk4pnk4r9zx",
+        "title": "Lampara ",
+        "description": "Lampara muy bonita",
+        "price": "29.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/bp/__/c10420p1046947170/i5118966907.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.506165,
+          38.391363
+        ]
+      },
+      "properties": {
+        "id": "x6qmww1reejy",
+        "user_id": "ejk4pnk4r9zx",
+        "title": "Lampara ",
+        "description": "Lampara en rojo, c\u00f3mo nueva",
+        "price": "18.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/bp/__/c10420p1046946690/i5118961872.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.514964,
+          38.389821
+        ]
+      },
+      "properties": {
+        "id": "wzy494l3eez5",
+        "user_id": "9nz0ln08qdzo",
+        "title": "L\u00e1mpara ",
+        "description": "L\u00e1mpara habitaci\u00f3n infantil",
+        "price": "35.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/1g/__/c10420p1044788544/i5106879539.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.517496,
+          38.391937
+        ]
+      },
+      "properties": {
+        "id": "0j24gow7emzy",
+        "user_id": "g0j23r2enm6y",
+        "title": "Lampara",
+        "description": "Lampara en perfectas condiciones.",
+        "price": "13.99 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h6/vm/__/c10420p1039478111/i5075046877.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.494422,
+          38.393827
+        ]
+      },
+      "properties": {
+        "id": "v6ggvv4qe26e",
+        "user_id": "4z4v8mv28mzy",
+        "title": "Lampara forja ",
+        "description": "Lampara forja",
+        "price": "65.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/8c/__/c10420p1046789788/i5117599714.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.487422,
+          38.379336
+        ]
+      },
+      "properties": {
+        "id": "mzn2po2w9kzn",
+        "user_id": "w67dk7pl0w6x",
+        "title": "Lampara de marmol",
+        "description": "Buen estado va bien funciona perfectamente ",
+        "price": "60.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/ns/__/c10420p1045831673/i5112939063.jpg?pictureSize=W320",
+        "postal_code": "03011",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.514744,
+          38.395557
+        ]
+      },
+      "properties": {
+        "id": "wzy4ompmpvz5",
+        "user_id": "qnzx0k59lez2",
+        "title": "Se venden diferentes l\u00e1mparas ",
+        "description": "Se venden 5 l\u00e1mparas de diferente modelos \n10 euros cada una\nTodas por 40",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h8/s4/__/c10420p1042674444/i5092027753.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.514261,
+          38.395744
+        ]
+      },
+      "properties": {
+        "id": "nz04dvw7r7jo",
+        "user_id": "ke65q3g33g6o",
+        "title": "Lampara juvenil ",
+        "description": "Lampara juvenil madera con tres tulipas verde y blanca",
+        "price": "15.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/pb/__/c10420p1044223103/i5103329100.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.512243,
+          38.393664
+        ]
+      },
+      "properties": {
+        "id": "p614e0m1r265",
+        "user_id": "kmzn2mlgd7zn",
+        "title": "Lampara ",
+        "description": "Muy bonita de piel marr\u00f3n y blanco cosida con cuerda de cuero ",
+        "price": "30.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/rk/__/c10420p1040968431/i5083020579.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.523967,
+          38.392595
+        ]
+      },
+      "properties": {
+        "id": "xzo2dn1dmw69",
+        "user_id": "v6g0mlq7e7je",
+        "title": "Aplique de 3 focos - L\u00e1mpara de techo",
+        "description": "Aplique de 3 focos - L\u00e1mpara de techo\nColor negro. Los focos se pueden dirigir hacia diferentes direcciones. ",
+        "price": "8.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h8/d6/__/c10420p1041976333/i5087947344.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.519894,
+          38.395859
+        ]
+      },
+      "properties": {
+        "id": "ejk8rerde9jx",
+        "user_id": "wzyld83q5p65",
+        "title": "L\u00e1mpara para mesita de noche",
+        "description": "L\u00e1mpara para mesita de noche (Leroy Merl\u00edn, ref. 23115). Max. 40W E14 230V 50Hz.\nEst\u00e1 en perfecto estado.",
+        "price": "5.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/pl/__/c10420p1045915971/i5113256853.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.507311,
+          38.40597
+        ]
+      },
+      "properties": {
+        "id": "36e1o0vd1kjd",
+        "user_id": "owzy11oo95z5",
+        "title": " Cuatro l\u00e0mparas ",
+        "description": "Vendo cuatro l\u00e1mparas de dormitorio, dos de mesita y dos de techo, en muy buen estado.",
+        "price": "80.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/xx/__/c10420p1041265863/i5084395516.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.513733,
+          38.392105
+        ]
+      },
+      "properties": {
+        "id": "vjrqxy7p2lzk",
+        "user_id": "8ejkegyrlrjx",
+        "title": "Lamparas ",
+        "description": "Una l\u00e1mpara de comedor y la otra de habitaci\u00f3n ",
+        "price": "60.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/7e/__/c10420p1043386391/i5095768027.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.500402,
+          38.362098
+        ]
+      },
+      "properties": {
+        "id": "pj9mee587k6e",
+        "user_id": "7v6gewo0y2ze",
+        "title": "L\u00e1mpara colgante",
+        "description": "L\u00e1mpara de techo. luz ideal para sal\u00f3n. tiene una rotura como se ve en la foto. M\u00e1s l\u00e1mparas en mi perfil.",
+        "price": "20.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/91/__/c10420p1046822185/i5117748345.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.500402,
+          38.362098
+        ]
+      },
+      "properties": {
+        "id": "36e1vvnl78jd",
+        "user_id": "7v6gewo0y2ze",
+        "title": "L\u00e1mpara colgante",
+        "description": "L\u00e1mpara de techo. En muy buen estado. M\u00e1s l\u00e1mparas en mi perfil.",
+        "price": "20.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/8p/__/c10420p1046806687/i5117674836.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.500402,
+          38.362098
+        ]
+      },
+      "properties": {
+        "id": "8z8keeg73dz3",
+        "user_id": "7v6gewo0y2ze",
+        "title": "L\u00e1mpara colgante",
+        "description": "L\u00e1mpara de techo. En muy buen estado. M\u00e1s l\u00e1mparas en mi perfil.",
+        "price": "30.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/8o/__/c10420p1046806122/i5117672702.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.500402,
+          38.362098
+        ]
+      },
+      "properties": {
+        "id": "ejk8rrkxk1jx",
+        "user_id": "7v6gewo0y2ze",
+        "title": "L\u00e1mpara colgante",
+        "description": "L\u00e1mpara de techo. luz ideal para sal\u00f3n. En muy buen estado. M\u00e1s l\u00e1mparas en mi perfil.",
+        "price": "20.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/hb/8r/__/c10420p1046809271/i5117686587.jpg?pictureSize=W320",
+        "postal_code": "03009",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.535967,
+          38.389874
+        ]
+      },
+      "properties": {
+        "id": "3zl8do3g9q6x",
+        "user_id": "qnzxlx2depz2",
+        "title": "Lampara",
+        "description": "Lampara antigua.Se pinto la parte inferior",
+        "price": "5.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h8/zk/__/c10420p1043022045/i5093675818.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.515168,
+          38.39381
+        ]
+      },
+      "properties": {
+        "id": "w674rwkkoy6x",
+        "user_id": "pj9yygwr9v6e",
+        "title": "Lampara de techo",
+        "description": "se vende en perfecto estado",
+        "price": "50.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h8/bo/__/c10420p1041906652/i5087635815.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.527376,
+          38.401663
+        ]
+      },
+      "properties": {
+        "id": "pj9mexrvvo6e",
+        "user_id": "7v6g23k985ze",
+        "title": "Lampara de techo infantil",
+        "description": "Lampara de techo infantil",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/pa/__/c10420p1045901613/i5113204656.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.527376,
+          38.401663
+        ]
+      },
+      "properties": {
+        "id": "vjrqxo10d4zk",
+        "user_id": "7v6g23k985ze",
+        "title": "Lampara infantil barbie",
+        "description": "Lampara infantil",
+        "price": "10.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/p5/__/c10420p1045894519/i5113178155.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.526467,
+          38.39625
+        ]
+      },
+      "properties": {
+        "id": "pzp27g1rm5j3",
+        "user_id": "qnzxlole0mz2",
+        "title": "L\u00e1mpara de techo juvenil",
+        "description": "L\u00e1mpara casi nueva, de 30 cm de di\u00e1metro y 29 cm alta. Incluye bombilla.",
+        "price": "30.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/n6/__/c10420p1045802074/i5112768983.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.522227,
+          38.400585
+        ]
+      },
+      "properties": {
+        "id": "wzy4978wxez5",
+        "user_id": "v6g44x1g8l6e",
+        "title": "L\u00e1mpara en forma de flor",
+        "description": "L\u00e1mpara de noche en forma de flor rosa en perfecto estado y muy barata!\n\n",
+        "price": "5.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/rc/__/c10420p1044316992/i5103748794.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.524877,
+          38.400454
+        ]
+      },
+      "properties": {
+        "id": "xzo20vxg8w69",
+        "user_id": "4w67ve8p286x",
+        "title": "Lampara de techo y de mesita",
+        "description": "Para habitaci\u00f3n de ni\u00f1a",
+        "price": "18.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h9/ot/__/c10420p1044199357/i5103227399.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.524871,
+          38.396418
+        ]
+      },
+      "properties": {
+        "id": "xzo2dmv3k469",
+        "user_id": "xpzp9gdnx463",
+        "title": "Lampara forja ",
+        "description": "Lampara de forja con 5 tulipas",
+        "price": "25.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/hf/__/c10420p1040495633/i5080755480.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.522477,
+          38.399248
+        ]
+      },
+      "properties": {
+        "id": "qzmen73x3ljv",
+        "user_id": "08z81o8le163",
+        "title": "Lampara techo",
+        "description": "Vendo dos lamparas de salon-comedor \n20 euros cada una ",
+        "price": "20.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/g7/__/c10420p1045476956/i5111305235.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.496919,
+          38.401697
+        ]
+      },
+      "properties": {
+        "id": "nzx49wppmpj2",
+        "user_id": "v9jd79w9p2jk",
+        "title": "Lampara de techo",
+        "description": "lampara techo miason du monde",
+        "price": "25.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/qj/__/c10420p1045959806/i5113418679.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.495005,
+          38.374346
+        ]
+      },
+      "properties": {
+        "id": "xzo20g5em569",
+        "user_id": "qzm9yqqq3x6v",
+        "title": "Lamparas",
+        "description": "Lamparas Vitaje de los a\u00f1os 80 .. 20 euros cada una..",
+        "price": "20.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/ei/__/c10420p1045398357/i5110887828.jpg?pictureSize=W320",
+        "postal_code": "03011",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.529908,
+          38.394
+        ]
+      },
+      "properties": {
+        "id": "e658e8dl3m6o",
+        "user_id": "npj952rlqmze",
+        "title": "Lamparas",
+        "description": "Juego de dos lamparas de techo, como nuevas. Se venden juntas en 40\u20ac las dos ",
+        "price": "25.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/4w/__/c10420p1044950472/i5107922963.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.529908,
+          38.394
+        ]
+      },
+      "properties": {
+        "id": "xzo202o4l269",
+        "user_id": "npj952rlqmze",
+        "title": "Lampara ",
+        "description": "Lampara de techo en buen estado",
+        "price": "20.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/4n/__/c10420p1044938333/i5107855983.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.484833,
+          38.368439
+        ]
+      },
+      "properties": {
+        "id": "wzy4o11eppz5",
+        "user_id": "436epg245yjd",
+        "title": "Lampara Simpsons ",
+        "description": "Lampara de 35 cm de di\u00e1metro ",
+        "price": "15.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/h7/sl/__/c10420p1041016720/i5083207549.jpg?pictureSize=W320",
+        "postal_code": "03011",
+        "region": "Comunidad Valenciana"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.515289,
+          38.399888
+        ]
+      },
+      "properties": {
+        "id": "9jdkvnwyy96k",
+        "user_id": "9nz0oxdoeezo",
+        "title": "Lamparas de techo ",
+        "description": "2 Lamparas de techo",
+        "price": "100.0 EUR",
+        "image": "https://cdn.wallapop.com/images/10420/ha/o8/__/c10420p1045852312/i5113023268.jpg?pictureSize=W320",
+        "postal_code": "03690",
+        "region": "Comunidad Valenciana"
+      }
+    }
+  ]
+};
+
+    // Añadir fuente GeoJSON al mapa
+    map.on('load', function() {
+        map.addSource('points', {
+            "type": "geojson",
+            "data": geojson
+        });
+
+        // Añadir una capa para mostrar los puntos
+        map.addLayer({
+            "id": "points",
+            "type": "circle",
+            "source": "points",
+            "paint": {
+                "circle-radius": 6,
+                "circle-color": "#007cbf"
+            }
+        });
+
+        // Crear popups cuando se hace clic en un punto
+        map.on('click', 'points', function (e) {
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const properties = e.features[0].properties;
+
+            // Contenido del popup incluyendo la imagen
+            const popupContent = `
+                <div class="popup-content">
+                    <h3>${properties.title}</h3>
+                    <p>${properties.description}</p>
+                    <img src="${properties.image}" alt="Imagen" />
+                </div>
+            `;
+
+            // Asegurarse de que el mapa se mueve con el zoom
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            // Crear el popup
+            new maplibregl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(popupContent)
+                .addTo(map);
+        });
+
+        // Cambiar el cursor cuando pase por encima de un punto
+        map.on('mouseenter', 'points', function () {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Volver al cursor normal
+        map.on('mouseleave', 'points', function () {
+            map.getCanvas().style.cursor = '';
+        });
+    });
+</script>
+
+</body>
+</html>
