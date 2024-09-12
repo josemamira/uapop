@@ -1,7 +1,5 @@
 [En español en este mismo documento](#Español)
 
-[Text to sub-heading](#text-of-the-subheading)
-
 # UAPOP: Tools for make web maps using Wallapop Rest API
 
 This project aims to show some examples of using the Wallapop REST API to generate web maps using [MapLibre GL JS](https://github.com/maplibre/maplibre-gl-js). It also includes some Python utilities to convert API requests into formats such as Excel (XLS), CSV, GeoJSON or LibreOffice Calc (ODS).
@@ -52,8 +50,6 @@ https://api.wallapop.com/api/v3/search?source=search_box&keywords=bicicleta%20mt
 Smartwatch under €50 from the Watches category, less than 1 km away | Smartwatch de menos de 50€ de la categoría Relojes, a menos de 1 km
 
 https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=smartwatch&category_id=24200&latitude=38.38277636&longitude=-0.51136203&max_sale_price=100
-
-# text-of-the-subheading
 
 ### TOOLS:
 
