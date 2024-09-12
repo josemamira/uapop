@@ -1,5 +1,10 @@
 # UAPOP: Tools for make maps using Wallapop Rest API
 
+Demo HTML pages using Maplibre GL JS
+
+- [Geojson in html code: test1_geojson_text.html](maplibre/test1_geojson_text.html)
+- [Geojson from URL link:  test2_geojson_url.html](maplibre/test2_geojson_url.html)
+
 Fecha documento: 11 septiembre 2024
 
 Wallapop tiene una API que se puede consultar, por ejemplo vía navegador
