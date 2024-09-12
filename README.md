@@ -1,4 +1,4 @@
-[En español](#Español)
+[En español en este mismo documento](#Español)
 
 
 # UAPOP: Tools for make web maps using Wallapop Rest API
