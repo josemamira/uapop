@@ -87,6 +87,7 @@ Demo HTML pages using Maplibre GL JS
 - [Geojson in html code: test1_geojson_text.html](https://josemamira.github.io/uapop/maplibre/test1_geojson_text.html)
 - [Geojson from URL link:  test2_geojson_url.html](https://josemamira.github.io/uapop/maplibre/test2_geojson_url.html)
 - [REST to map:  rest2map.html](https://josemamira.github.io/uapop/maplibre/rest2map.html)
+- [REST to map with form:  rest2map_form.html](https://josemamira.github.io/uapop/maplibre/rest2map_form.html)
 
 
 
@@ -185,6 +186,7 @@ Ejemplos web usando Maplibre GL JS
 - [Geojson in html code: test1_geojson_text.html](https://josemamira.github.io/uapop/maplibre/test1_geojson_text.html)
 - [Geojson from URL link:  test2_geojson_url.html](https://josemamira.github.io/uapop/maplibre/test2_geojson_url.html)
 - [REST to map:  rest2map.html](https://josemamira.github.io/uapop/maplibre/rest2map.html)
+- [REST to map with form:  rest2map_form.html](https://josemamira.github.io/uapop/maplibre/rest2map_form.html)
 
 
 
