@@ -3,7 +3,7 @@
 
 # UAPOP: Tools for make web maps using Wallapop Rest API
 
-This project aims to show some examples of using the Wallapop REST API to generate web maps using MapLibre GL JS. It also includes some Python utilities to convert API requests into formats such as Excel (XLS), CSV, GeoJSON or LibreOffice Calc (ODS).
+This project aims to show some examples of using the Wallapop REST API to generate web maps using [MapLibre GL JS](https://github.com/maplibre/maplibre-gl-js). It also includes some Python utilities to convert API requests into formats such as Excel (XLS), CSV, GeoJSON or LibreOffice Calc (ODS).
 
 Date: 11 septiembre 2024
 
