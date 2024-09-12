@@ -17,22 +17,22 @@
 
     
     <script>
-        maplibregl.accessToken = 'YOUR_ACCESS_TOKEN';  // Opcional si tu mapa requiere un token
+        /*maplibregl.accessToken = 'YOUR_ACCESS_TOKEN';  // Opcional si tu mapa requiere un token
 
         const map = new maplibregl.Map({
             container: 'map', // ID del contenedor del mapa
             style: 'https://demotiles.maplibre.org/style.json', // Estilo del mapa
             center: [-0.51, 38.38], // Coordenadas iniciales [longitud, latitud]
 			zoom: 12 // Nivel de zoom inicial
-        });
-        /*// Inicializa el mapa
+        });*/
+        // Inicializa el mapa
 		const key = 'FarArRCYRxNEd0LV6d95';
 		const map = new maplibregl.Map({
 			container: 'map', // ID del contenedor
 			style: 'https://api.maptiler.com/maps/streets/style.json?key='+key, // URL de estilo de MapLibre
 			center: [-0.51, 38.38], // Coordenadas iniciales [longitud, latitud]
 			zoom: 12 // Nivel de zoom inicial
-		});*/
+		});
 
         map.on('load', () => {
             map.addSource('points', {
