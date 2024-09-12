@@ -133,19 +133,19 @@ PARÁMETROS (con ejemplo):
 
 Bicicleta MTB ordenado por distancia. 
 
-https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest
+[https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest](https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest)
 
 Bicicleta de menos de 500 €
 
-https://api.wallapop.com/api/v3/search?source=search_box&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest&max_sale_price=500
+[https://api.wallapop.com/api/v3/search?source=search_box&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest&max_sale_price=500](https://api.wallapop.com/api/v3/search?source=search_box&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest&max_sale_price=500)
 
 Buscar bicicletas entre 400 y 500 € en Alicante
 
-https://api.wallapop.com/api/v3/search?source=search_box&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest&min_sale_price=300&max_sale_price=500
+[https://api.wallapop.com/api/v3/search?source=search_box&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest&min_sale_price=300&max_sale_price=500](https://api.wallapop.com/api/v3/search?source=search_box&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest&min_sale_price=300&max_sale_price=500)
 
 Smartwatch de menos de 50€ de la categoría Relojes, a menos de 1 km
 
-https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=smartwatch&category_id=24200&latitude=38.38277636&longitude=-0.51136203&max_sale_price=100
+[https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=smartwatch&category_id=24200&latitude=38.38277636&longitude=-0.51136203&max_sale_price=100](https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=smartwatch&category_id=24200&latitude=38.38277636&longitude=-0.51136203&max_sale_price=100)
 
 
 ### UTILIDADES:
