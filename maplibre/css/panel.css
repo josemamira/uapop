@@ -1,7 +1,7 @@
 .map-overlay {
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     position: absolute;
-    width: 200px;
+    width: 220px;
     top: 0;
     left: 0;
     padding: 10px;
@@ -31,33 +31,6 @@
 
 .map-overlay-inner p {
     margin: 0;
-}
-
-.map-overlay-inner label {
-    display: block;
-    font-weight: bold;
-}
-
-.map-overlay-inner button {
-    background-color: cornflowerblue;
-    color: white;
-    border-radius: 5px;
-    display: inline-block;
-    height: 20px;
-    border: none;
-    cursor: pointer;
-}
-
-.map-overlay-inner button:focus {
-    outline: none;
-}
-
-.map-overlay-inner button:hover {
-    background-color: blue;
-    box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.1);
-    -webkit-transition: background-color 500ms linear;
-    -ms-transition: background-color 500ms linear;
-    transition: background-color 500ms linear;
 }
 
 .offset>label,
