@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos en el Mapa</title>
+    <title>UaPop: B&uacute;squeda de productos en mapa</title>
     <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/slider.css" />
     <style>
@@ -22,6 +22,19 @@
         .popup-content {
             font-family: Arial, sans-serif;
         }
+
+        .button {
+            background-color: blue;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 10px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -31,6 +44,7 @@
     <div id="map"></div>
     <div class="map-overlay top">
         <div class="map-overlay-inner">
+            <h3>UApop</h3>
             <fieldset>
                 <label for="category">Seleccionar categoria</label>
                 <select id="category" name="category">
@@ -42,7 +56,7 @@
                 <input type="text" id="keywords" name="keywords" />
             </fieldset>
             <fieldset>
-                <label for="distance_in_km">Seleccionar categoria</label>
+                <label for="distance_in_km">Seleccionar distancia</label>
                 <select id="distance_in_km" name="distance_in_km">
                     <option value="0">Sin límites</option>
                     <option value="1">1 km</option>
@@ -56,16 +70,16 @@
             </fieldset>
             <fieldset>
                 <label for="prices" id="pricesLabel">Definir rango precios</label>
-                <input type="checkbox" id="prices" name="prices" />
+                <input type="checkbox" id="prices" name="prices" checked/>
                 <!-- https://codepen.io/joosts/pen/rNLdxvK -->
                 <div class="min-max-slider" data-legendnum="2">
-                    <label for="min">Minimum price</label>
-                    <input id="min" class="min" name="min" type="range" step="1" min="0" max="3000" />
-                    <label for="max">Maximum price</label>
-                    <input id="max" class="max" name="max" type="range" step="1" min="0" max="3000" />
+                    <!--<label for="min">Minimum price</label>-->
+                    <input id="min" class="min" name="min" type="range" step="5" min="0" max="5000" />
+                    <!--<label for="max">Maximum price</label>-->
+                    <input id="max" class="max" name="max" type="range" step="5" min="0" max="5000" />
                 </div>
             </fieldset>
-            <button type="button" id="restButton" name="restButton">
+            <button type="button" id="restButton" name="restButton" class="button">
                 Obtener productos
             </button>
         </div>
@@ -92,7 +106,7 @@
 
         // Función para agregar puntos al mapa
         function addMarkersToMap(products) {
-            console.log(products[1]);
+            //console.log(products[1]);
             products.forEach(product => {
                 const el = document.createElement('div');
                 el.className = 'marker';
@@ -127,8 +141,8 @@
                 .then(response => response.json()) // Convertir respuesta a JSON
                 .then(data => {
                     // Mostrar resultado en la página
-                    console.log(data);
-                    const categories = data.categories; console.log(categories);
+                    //console.log(data);
+                    const categories = data.categories; //console.log(categories);
                     addCategories(categories);
                 })
                 .catch(error => {
@@ -136,53 +150,75 @@
                     alert('Error al obtener los datos');
                 });
 
-            fetch(apiUrl)
+            /*fetch(apiUrl)
                 .then(response => response.json()) // Convertir respuesta a JSON
                 .then(data => {
                     // Mostrar resultado en la página
-                    console.log(data);
-                    const products = data.data.section.payload.items; console.log(products);
+                    //console.log(data);
+                    const products = data.data.section.payload.items; //console.log(products);
                     addMarkersToMap(products);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Error al obtener los datos');
-                });
+                });*/
         }
 
         const restButton = document.getElementById('restButton');
         restButton.addEventListener('click', () => {
-            console.log(map.getCenter());
-            console.log(map.getCenter().lat);
-            console.log(map.getCenter().lng);
+            //console.log(map.getCenter());            
             lat = map.getCenter().lat;
             lng = map.getCenter().lng;
             // select category
-            selectedCategory = document.querySelector('#category');
-            output = selectedCategory.value;
-            console.log(output);
-            // select category
-            selectedDistance = document.querySelector('#distance_in_km');
-            output2 = selectedDistance.value;
-            console.log(output2);
-            palabras = document.getElementById("keywords").value;
-            console.log(palabras);
+            var cat = "";
+            var selectedCategory = document.querySelector('#category').value;
+            //console.log(selectedCategory);
+            if (selectedCategory == 0) { } else { cat = "category_id=" + selectedCategory; console.log(cat); }
+
+            // select distante
+            var dist = "";
+            var selectedDistance = document.querySelector('#distance_in_km').value;
+            if (selectedDistance == 0) { } else { dist = "distance_in_km=" + selectedDistance; console.log(dist); }
+
+            // Keywords
+            var key = "";
+            console.log(selectedDistance);
+            keywords = document.getElementById("keywords").value;
+            if (typeof keywords === "string" && keywords.length === 0) {
+                console.log("No hay palabras claves");
+            } else if (keywords === null) {
+                console.log("La palabra clave es nula");
+            } else {
+                console.log("OK. Las palabras clave no están vacías o nulas");
+                key = "keywords=" + keywords; console.log(key);
+            }
+            console.log(keywords);
             console.log(document.getElementById("min").value);
             console.log(document.getElementById("max").value);
-
+            // rango precios
+            var minPrice="";
+            var maxPric="";
             if (document.getElementById('prices').checked) {
                 console.log('prices esta activo');
+                minPrice = "min_sale_price="+document.getElementById("min").value;
+                maxPrice = "max_sale_price="+document.getElementById("max").value;
+
 
             } else {
                 console.log('prices NOOOOOOOOO esta activo');
             }
-            restUrl = encodeURI('https://api.wallapop.com/api/v3/search?source=quick_filters&keywords='+palabras+'&latitude='+lat+'&longitude='+lng+'&order_by=closest');
+            // formar la url Rest
+            var laUrl = 'https://api.wallapop.com/api/v3/search?source=quick_filters&' + 
+                key + '&latitude=' + lat + '&longitude=' + lng + '&' + cat + '&' + dist + '&' + minPrice + '&' + maxPrice +'&order_by=closest';
+            //console.log(laUrl); 
+            restUrl = encodeURI(laUrl);   
+            //restUrl = encodeURI('https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=' + keywords + '&latitude=' + lat + '&longitude=' + lng + '&order_by=closest');
             console.log(restUrl);
             fetch(restUrl)
                 .then(response => response.json()) // Convertir respuesta a JSON
                 .then(data => {
                     // Mostrar resultado en la página
-                    console.log(data);
+                    //console.log(data);
                     const products = data.data.section.payload.items; console.log(products);
                     addMarkersToMap(products);
                 })
