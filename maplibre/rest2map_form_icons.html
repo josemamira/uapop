@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UaPop: B&uacute;squeda de productos en mapa</title>
+    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/slider.css" />
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .popup-content {
+            font-family: Arial, sans-serif;
+        }
+
+        .button {
+            background-color: blue;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 10px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <link rel="stylesheet" href="css/panel.css" />
+
+    <div id="map"></div>
+    <div class="map-overlay top">
+        <div class="map-overlay-inner">
+            <h3>UApop</h3>
+            <fieldset>
+                <label for="category">Seleccionar categoria</label>
+                <select id="category" name="category">
+                    <option value="0">Sin categoría</option>
+                </select>
+            </fieldset>
+            <fieldset>
+                <label for="keywords">Producto</label>
+                <input type="text" id="keywords" name="keywords" />
+            </fieldset>
+            <fieldset>
+                <label for="distance_in_km">Seleccionar distancia</label>
+                <select id="distance_in_km" name="distance_in_km">
+                    <option value="0">Sin límites</option>
+                    <option value="1">1 km</option>
+                    <option value="5">5 km</option>
+                    <option value="10">10 km</option>
+                    <option value="30">30 km</option>
+                    <option value="50">50 km</option>
+                    <option value="100">100 km</option>
+                    <option value="200">200 km</option>
+                </select>
+            </fieldset>
+            <fieldset>
+                <label for="prices" id="pricesLabel">Definir rango precios</label>
+                <input type="checkbox" id="prices" name="prices" checked />
+                <!-- https://codepen.io/joosts/pen/rNLdxvK -->
+                <div class="min-max-slider" data-legendnum="2">
+                    <!--<label for="min">Minimum price</label>-->
+                    <input id="min" class="min" name="min" type="range" step="5" min="0" max="5000" />
+                    <!--<label for="max">Maximum price</label>-->
+                    <input id="max" class="max" name="max" type="range" step="5" min="0" max="5000" />
+                </div>
+            </fieldset>
+            <button type="button" id="restButton" name="restButton" class="button">
+                Obtener productos
+            </button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <script src="js/slider.js"></script>
+    <script>
+        // URL de la API
+        const apiUrl = 'https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=bicicleta%20mtb&latitude=38.38277636&longitude=-0.51136203&order_by=closest&distance_in_km=1'; // Cambia esta URL a la correcta
+
+        // Inicializa el mapa
+        const key = 'FarArRCYRxNEd0LV6d95';
+        const map = new maplibregl.Map({
+            container: 'map', // ID del contenedor
+            style: 'https://api.maptiler.com/maps/streets/style.json?key=' + key, // URL de estilo de MapLibre
+            center: [-0.51, 38.38], // Coordenadas iniciales [longitud, latitud]
+            zoom: 12 // Nivel de zoom inicial
+        });
+
+        // Añadir controles de zoom y rotación al mapa
+        map.addControl(new maplibregl.NavigationControl());
+
+        // Función para determinar el icono según la categoría
+        function getIcon(category) {
+            switch (category) {
+                case '100':
+                    return 'img/100.png';
+                case '14000':
+                    return 'img/14000.png';
+                case '12800':
+                    return 'img/12800.png';
+                case '12465':
+                    return 'img/12465.png';
+                case '200':
+                    return 'img/200.png';
+                case '24200':
+                    return 'img/24200.png';
+                case '12579':
+                    return 'img/12579.png';
+                case '17000':
+                    return 'img/17000.png';
+                case '12467':
+                    return 'img/12467.png';
+                case '13100':
+                    return 'img/13100.png';
+                case '12463':
+                    return 'img/12463.png';
+                case '12461':
+                    return 'img/12461.png';
+                case '18000':
+                    return 'img/18000.png';
+                case '19000':
+                    return 'img/19000.png';
+                case '20000':
+                    return 'img/20000.png';
+                case '21000':
+                    return 'img/21000.png';
+                case '13200':
+                    return 'img/13200.png';
+                case '1401248500':
+                    return 'img/12485.png';
+                default:
+                    return 'img/default.png';
+            }
+        }
+
+
+        // Función para agregar puntos al mapa
+        function addMarkersToMap(products) {
+            //console.log(products[1]);
+            products.forEach(product => {
+                const el = document.createElement('div');
+                el.className = 'marker';
+
+                // Obtener la URL del icono basado en la propiedad 'category'
+                var iconUrl = getIcon(`${product.category_id}`);
+                console.log(iconUrl);
+
+                // Establecer el fondo del marcador como el icono PNG
+                el.style.backgroundImage = 'url(' + iconUrl + ')';
+                //el.style.backgroundImage = 'url(http://localhost/uapop/maplibre/img/pin.png)';
+
+                el.style.width = '30px'; // Ancho del icono
+                el.style.height = '30px'; // Alto del icono
+                el.style.backgroundSize = '100%'; // Ajustar la imagen al tamaño del div
+
+                const marker = new maplibregl.Marker({element: el})
+                    .setLngLat([product.location.longitude, product.location.latitude])
+                    .setPopup(new maplibregl.Popup({ offset: 25 }) // Añadir un popup
+                        .setHTML(`
+                            <div class="popup-content">
+                                <h3>${product.title}</h3>
+                                <p>${product.description}</p>
+                                <p><strong>Precio:</strong> ${product.price.amount} ${product.price.currency}</p>
+                                <img src="${product.images[0].urls.small}" alt="${product.title}" width=220/>
+                            </div>
+                        `))
+                    .addTo(map);
+
+            });
+        }
+
+        function addCategories(categories) {
+            categories.forEach(category => {
+                var ul = document.getElementById("category");
+                ul.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+            });
+        }
+
+        document.body.onload = function () {
+            const catUrl = 'https://api.wallapop.com/api/v3/categories';
+
+            fetch(catUrl)
+                .then(response => response.json()) // Convertir respuesta a JSON
+                .then(data => {
+                    // Mostrar resultado en la página
+                    //console.log(data);
+                    const categories = data.categories; //console.log(categories);
+                    addCategories(categories);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al obtener los datos');
+                });
+
+            /*fetch(apiUrl)
+                .then(response => response.json()) // Convertir respuesta a JSON
+                .then(data => {
+                    // Mostrar resultado en la página
+                    //console.log(data);
+                    const products = data.data.section.payload.items; //console.log(products);
+                    addMarkersToMap(products);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al obtener los datos');
+                });*/
+        }
+
+        const restButton = document.getElementById('restButton');
+        restButton.addEventListener('click', () => {
+            //console.log(map.getCenter());            
+            lat = map.getCenter().lat;
+            lng = map.getCenter().lng;
+            // select category
+            var cat = "";
+            var selectedCategory = document.querySelector('#category').value;
+            //console.log(selectedCategory);
+            if (selectedCategory == 0) { } else { cat = "category_id=" + selectedCategory; console.log(cat); }
+
+            // select distante
+            var dist = "";
+            var selectedDistance = document.querySelector('#distance_in_km').value;
+            if (selectedDistance == 0) { } else { dist = "distance_in_km=" + selectedDistance; console.log(dist); }
+
+            // Keywords
+            var key = "";
+            console.log(selectedDistance);
+            keywords = document.getElementById("keywords").value;
+            if (typeof keywords === "string" && keywords.length === 0) {
+                console.log("No hay palabras claves");
+            } else if (keywords === null) {
+                console.log("La palabra clave es nula");
+            } else {
+                console.log("OK. Las palabras clave no están vacías o nulas");
+                key = "keywords=" + keywords; console.log(key);
+            }
+            console.log(keywords);
+            console.log(document.getElementById("min").value);
+            console.log(document.getElementById("max").value);
+            // rango precios
+            var minPrice = "";
+            var maxPric = "";
+            if (document.getElementById('prices').checked) {
+                console.log('prices esta activo');
+                minPrice = "min_sale_price=" + document.getElementById("min").value;
+                maxPrice = "max_sale_price=" + document.getElementById("max").value;
+
+
+            } else {
+                console.log('prices NOOOOOOOOO esta activo');
+            }
+            // formar la url Rest
+            var laUrl = 'https://api.wallapop.com/api/v3/search?source=quick_filters&' +
+                key + '&latitude=' + lat + '&longitude=' + lng + '&' + cat + '&' + dist + '&' + minPrice + '&' + maxPrice + '&order_by=closest';
+            //console.log(laUrl); 
+            restUrl = encodeURI(laUrl);
+            //restUrl = encodeURI('https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=' + keywords + '&latitude=' + lat + '&longitude=' + lng + '&order_by=closest');
+            console.log(restUrl);
+            fetch(restUrl)
+                .then(response => response.json()) // Convertir respuesta a JSON
+                .then(data => {
+                    // Mostrar resultado en la página
+                    //console.log(data);
+                    const products = data.data.section.payload.items; console.log(products);
+                    addMarkersToMap(products);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al obtener los datos');
+                });
+
+        });
+
+
+
+    </script>
+</body>
+
+</html>
