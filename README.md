@@ -4,6 +4,16 @@
 
 This project aims to show some examples of using the Wallapop REST API to generate web maps using [MapLibre GL JS](https://github.com/maplibre/maplibre-gl-js). It also includes some Python utilities to convert API requests into formats such as Excel (XLS), CSV, GeoJSON or LibreOffice Calc (ODS).
 
+### DEMO
+
+Demo HTML pages using Maplibre GL JS
+
+- [Geojson in html code: test1_geojson_text.html](https://josemamira.github.io/uapop/maplibre/test1_geojson_text.html)
+- [Geojson from URL link:  test2_geojson_url.html](https://josemamira.github.io/uapop/maplibre/test2_geojson_url.html)
+- [REST to map:  rest2map.html](https://josemamira.github.io/uapop/maplibre/rest2map.html)
+- [REST to map with form:  rest2map_form.html](https://josemamira.github.io/uapop/maplibre/rest2map_form.html)
+- [REST to map with form and icons:  rest2map_form_icons.html](https://josemamira.github.io/uapop/maplibre/rest2map_form_icons.html)
+
 Date: 11 septiembre 2024
 
 Wallapop has an API that can be consulted using a web browser
@@ -78,18 +88,6 @@ Python files:
   
 
 NOTE: In each file you have to change the line with the URL so that it works with other criteria: position, text, etc.
-
-
-### DEMO
-
-Demo HTML pages using Maplibre GL JS
-
-- [Geojson in html code: test1_geojson_text.html](https://josemamira.github.io/uapop/maplibre/test1_geojson_text.html)
-- [Geojson from URL link:  test2_geojson_url.html](https://josemamira.github.io/uapop/maplibre/test2_geojson_url.html)
-- [REST to map:  rest2map.html](https://josemamira.github.io/uapop/maplibre/rest2map.html)
-- [REST to map with form:  rest2map_form.html](https://josemamira.github.io/uapop/maplibre/rest2map_form.html)
-
-
 
 
 
