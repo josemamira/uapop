@@ -6,7 +6,7 @@
 
 This project aims to show some examples of using the Wallapop REST API to generate web maps using [MapLibre GL JS](https://github.com/maplibre/maplibre-gl-js). It also includes some Python utilities to convert API requests into formats such as Excel (XLS), CSV, GeoJSON or LibreOffice Calc (ODS).
 
-### DEMO
+### DEMOS
 
 Demo HTML pages using Maplibre GL JS
 
