@@ -14,7 +14,7 @@ Demo HTML pages using Maplibre GL JS
 - [Geojson from URL link:  test2_geojson_url.html](https://josemamira.github.io/uapop/maplibre/test2_geojson_url.html)
 - [REST to map:  rest2map.html](https://josemamira.github.io/uapop/maplibre/rest2map.html)
 - [REST to map with form:  rest2map_form.html](https://josemamira.github.io/uapop/maplibre/rest2map_form.html)
-- [REST to map with form and icons:  rest2map_form_icons.html](https://josemamira.github.io/uapop/maplibre/rest2map_form_icons.html)
+- [REST to map with form and icons:  rest2map_form_icons.html](https://josemamira.github.io/uapop/maplibre/rest2map_form_icons.html) <img src="up.png" alt="recommended" width="32"/>
 
 Date: 11 septiembre 2024
 
