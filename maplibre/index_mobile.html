@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UaPop: B&uacute;squeda de productos en mapa</title>
+    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/slider.css" />
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        /*.popup-content { font-family: Arial, sans-serif;  }*/
+
+        .button {
+            background-color: blue;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 10px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+
+
+
+        /* Estilo para el popup */
+        /* Popups (adjustments to emulate Leaflet.js) - see https://github.com/mapbox/mapbox-gl-js/issues/8368 */
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .mapboxgl-popup {
+            animation: fadein 0.2s;
+        }
+
+        .mapboxgl-popup-content {
+            max-width: 300px;
+            min-width: 50px;
+            border-radius: 12px;
+            padding: 13px 19px;
+            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+            min-width: 300px;
+        }
+
+        .mapboxgl-popup-close-button {
+            font-size: 32px;
+            font-family: Tahoma, Verdana, sans-serif;
+            color: #c3c3c3;
+            font-weight: bold;
+        }
+
+        .mapboxgl-popup-close-button:hover {
+            color: #999;
+            background-color: white;
+            border-top-right-radius: 12px;
+        }
+
+        body .mapboxgl-map {
+            line-height: 1.4;
+        }
+
+
+        .container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+
+        /* Sidebar derecho */
+        .sidebar-right {
+            width: 300px;
+            background-color: #f8f9fa;
+            border-left: 1px solid #ddd;
+            padding: 20px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: none;
+        }
+
+        .wallapop {
+            display: flex;
+            align-items: center;
+            height: 3rem;
+            border: 0;
+            border-radius: 3px;
+            margin: 30px;
+            padding: 0 20px;
+            background-color: #13c1acff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        svg {
+            fill: #fff;
+            margin-left: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <link rel="stylesheet" href="css/panel.css" />
+    <div class="container">
+        <div id="map"></div>
+        <div class="map-overlay top">
+            <div class="map-overlay-inner">
+                <h3>UApop</h3>
+                <fieldset>
+                    <label for="category">Seleccionar categoria</label>
+                    <select id="category" name="category">
+                        <option value="0">Sin categoría</option>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <label for="keywords">Producto</label>
+                    <input type="text" id="keywords" name="keywords" />
+                </fieldset>
+                <fieldset>
+                    <label for="distance_in_km">Seleccionar distancia</label>
+                    <select id="distance_in_km" name="distance_in_km">
+                        <option value="0">Sin límites</option>
+                        <option value="1">1 km</option>
+                        <option value="5">5 km</option>
+                        <option value="10">10 km</option>
+                        <option value="30">30 km</option>
+                        <option value="50">50 km</option>
+                        <option value="100">100 km</option>
+                        <option value="200">200 km</option>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <label for="order_by">Ordenado por</label>
+                    <select id="order_by" name="order_by">
+                        <option value="most_relevance">Relevancia</option>
+                        <option value="closest" selected>Distancia</option>
+                        <option value="price_low_to_high">De menor a mayor precio</option>
+                        <option value="price_high_to_low">De mayor a menor precio</option>
+                        <option value="newest">Novedades</option>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <label for="prices" id="pricesLabel">Definir rango precios</label>
+                    <input type="checkbox" id="prices" name="prices" checked />
+                    <!-- https://codepen.io/joosts/pen/rNLdxvK -->
+                    <div class="min-max-slider" data-legendnum="2">
+                        <!--<label for="min">Minimum price</label>-->
+                        <input id="min" class="min" name="min" type="range" step="10" min="0" max="5000" />
+                        <!--<label for="max">Maximum price</label>-->
+                        <input id="max" class="max" name="max" type="range" step="50" min="0" max="5000" />
+                    </div>
+                </fieldset>
+
+                <button type="button" id="restButton" name="restButton" class="button">
+                    Obtener productos
+                </button>
+            </div>
+        </div>
+        <!-- Sidebar derecho con la información del marcador -->
+        <div class="sidebar-right" id="sidebar-right">
+            <h2>Detalles del Marcador</h2>
+            <div id="marker-info"></div>
+            <button class="button" onclick="closeSidebar()">Cerrar</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <script src="js/slider.js"></script>
+    <script>
+
+        // Inicializa el mapa
+        const key = 'FarArRCYRxNEd0LV6d95';
+        const map = new maplibregl.Map({
+            container: 'map', // ID del contenedor
+            //style: 'https://api.maptiler.com/maps/streets/style.json?key=' + key, // URL de estilo de MapLibre
+            style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+            center: [-0.51, 38.38], // Coordenadas iniciales [longitud, latitud]
+            zoom: 12 // Nivel de zoom inicial
+        });
+
+        // Añadir controles de zoom y rotación al mapa
+        //map.addControl(new maplibregl.NavigationControl());
+
+        // Array para almacenar los marcadores
+        let markers = [];
+
+
+        // Función para determinar el icono según la categoría
+        function getIcon(category) {
+            switch (category) {
+                case '100':
+                    return 'img/100.png';
+                case '14000':
+                    return 'img/14000.png';
+                case '12800':
+                    return 'img/12800.png';
+                case '12465':
+                    return 'img/12465.png';
+                case '200':
+                    return 'img/200.png';
+                case '24200':
+                    return 'img/24200.png';
+                case '12579':
+                    return 'img/12579.png';
+                case '17000':
+                    return 'img/17000.png';
+                case '12467':
+                    return 'img/12467.png';
+                case '13100':
+                    return 'img/13100.png';
+                case '12463':
+                    return 'img/12463.png';
+                case '12461':
+                    return 'img/12461.png';
+                case '18000':
+                    return 'img/18000.png';
+                case '19000':
+                    return 'img/19000.png';
+                case '20000':
+                    return 'img/20000.png';
+                case '21000':
+                    return 'img/21000.png';
+                case '13200':
+                    return 'img/13200.png';
+                case '1401248500':
+                    return 'img/12485.png';
+                default:
+                    return 'img/default.png';
+            }
+        }
+
+
+        // Función para agregar puntos al mapa
+        function addMarkersToMap(products) {
+            // borrar marker previos
+
+            removeMarkers();
+
+            /* inicio prueba */
+            //console.log(products[1]);
+            products.forEach(product => {
+
+                // Crear el marcador
+                var el = document.createElement('div');
+                el.className = 'marker';
+
+                // Obtener la URL del icono basado en la propiedad 'category'
+                var iconUrl = getIcon(`${product.category_id}`);
+                // Establecer el fondo del marcador como el icono PNG
+                el.style.backgroundImage = 'url(' + iconUrl + ')';
+                el.style.width = '30px'; // Ancho del icono
+                el.style.height = '30px'; // Alto del icono
+                el.style.backgroundSize = '100%'; // Ajustar la imagen al tamaño del div
+
+
+                // Agregar el marcador al mapa                
+
+                const marker = new maplibregl.Marker(el)
+                    .setLngLat([product.location.longitude, product.location.latitude])
+                    .addTo(map);
+                // Añadir el marcador al array
+                markers.push(marker);
+                // Evento para abrir el sidebar con la información del marcador
+                el.addEventListener('click', () => {
+                    // Mostrar los atributos del marcador en el sidebar
+                    var infoDiv = document.getElementById('marker-info');
+                    infoDiv.innerHTML = `
+                    <div class="popup-content">
+                        <h3><img src="img/logo_wallapop.png" width="16">&nbsp;<a href="https://es.wallapop.com/item/${product.web_slug}" target="_blank">${product.title}</a></h3>
+                        <p>${product.description}</p>
+                        <p><strong>Precio:</strong> ${product.price.amount} ${product.price.currency}</p>
+                        <p align="center"><img src="${product.images[0].urls.small}" alt="${product.title}" width=220/></p>
+                        <hr>
+                        <button type="button" 
+                        onclick="window.open('https://es.wallapop.com/item/${product.web_slug}','_blank')" 
+                        class="wallapop">Ver producto <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path d="m 13.94351,2.288985 c -2.234058,0.00517 -3.630768,0.9769463 -4.7833297,2.3104035 -0.130503,0.1511769 -0.359226,0.1356819 -0.537537,0.04265 C 6.3640352,3.4713868 3.675205,4.2595233 2.5368562,6.4315602 1.5509764,8.3128725 1.9436266,10.457866 3.5445507,11.854636 3.7125237,12.000645 3.7462,12.256331 3.6273257,12.442395 2.2305549,14.62606 2.8649808,17.53343 5.0486465,18.930201 a 4.694752,4.694752 0 0 0 3.9989798,0.506497 c 0.236456,-0.06848 0.408407,-1.3e-4 0.523405,0.179431 1.4497467,2.134565 4.3581647,2.745834 6.5302017,1.330974 a 4.749279,4.749279 0 0 0 2.125671,-3.411221 c 0.02067,-0.169266 0.133159,-0.3319 0.298549,-0.373247 3.231567,-0.826951 3.675881,-3.8635 3.409706,-5.164655 C 21.552694,10.129589 20.34862,9.2419395 20.043682,9.0571675 19.917055,8.9809375 19.835581,8.8698215 19.842042,8.6798815 19.947995,5.2454538 17.441251,2.2799403 13.94351,2.288985 Z m -0.226623,1.6100902 c 1.276801,0.00313 2.520078,0.5504686 3.451851,1.6421399 1.703,1.9950174 1.426499,4.9049409 -0.732616,6.6505819 -0.286849,0.231287 -0.310268,0.665506 -0.06864,0.944602 0.229996,0.266175 0.640998,0.3126 0.921386,0.100694 0.736502,-0.555607 1.418736,-1.314015 1.841256,-2.134505 0.03876,-0.07494 0.10455,-0.164047 0.176908,-0.206687 0.213198,-0.126627 0.487126,-0.02594 0.613752,0.187255 0.262299,0.441902 0.491164,1.10217 0.520882,1.615138 0.103369,1.77019 -1.296208,3.294981 -3.070275,3.39835 -0.417352,0.0168 -0.646025,0.253071 -0.647316,0.653625 -0.01551,0.593079 -0.195049,1.168149 -0.519369,1.665611 -0.969082,1.489803 -2.961444,1.911132 -4.449955,0.943341 C 10.264948,18.390139 9.8436203,16.397554 10.81141,14.90775 h 0.0025 c 0.200277,-0.308814 0.113735,-0.72237 -0.195078,-0.922647 -0.308814,-0.201569 -0.7324347,-0.120045 -0.9340037,0.18877 -0.706784,0.967789 -1.03497,2.160307 -0.89413,3.352925 0.02713,0.231287 -0.129372,0.445878 -0.359368,0.491102 -0.797232,0.161514 -1.6253229,0.02831 -2.332107,-0.372239 -1.6190137,-0.91869 -2.186321,-2.975548 -1.2676309,-4.594561 0.1020767,-0.179603 0.2919768,-0.28698 0.5077592,-0.231419 0.4134751,0.114998 0.8424349,0.17069 1.2714154,0.166814 a 0.61207244,0.61207244 0 0 0 0.6071913,-0.61779 0.61233086,0.61233086 0 0 0 -0.5736262,-0.60593 C 6.0396407,11.724012 5.4789154,11.594832 4.9840373,11.24467 3.4696846,10.173511 3.2191367,8.1953905 4.2683299,6.761149 5.2710072,5.3928047 7.3176883,5.1537644 8.7700203,6.3089106 9.0529923,6.5337377 9.5386643,6.4935815 9.7027623,6.1731383 10.018036,5.5568019 10.54661,5.0697062 10.807616,4.879766 11.710398,4.2234553 12.723815,3.8966395 13.716883,3.8990752 Z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+
+                    // Mostrar el sidebar derecho
+                    document.getElementById('sidebar-right').style.display = 'block';
+
+                });
+            });
+
+            /* fin  prueba */
+            /* codigo ok */
+            /*
+            var el = document.createElement('div');
+            el.className = 'marker';
+
+            // Obtener la URL del icono basado en la propiedad 'category'
+            var iconUrl = getIcon(`${product.category_id}`);
+            console.log(iconUrl);
+
+            // Establecer el fondo del marcador como el icono PNG
+            el.style.backgroundImage = 'url(' + iconUrl + ')';
+            el.style.width = '30px'; // Ancho del icono
+            el.style.height = '30px'; // Alto del icono
+            el.style.backgroundSize = '100%'; // Ajustar la imagen al tamaño del div
+
+            const marker = new maplibregl.Marker({ element: el })
+
+                .setLngLat([product.location.longitude, product.location.latitude])
+                .setPopup(new maplibregl.Popup({ offset: 25 }) // Añadir un popup
+                    .setHTML(`
+                        <div class="popup-content">
+                            <h3><img src="img/logo_wallapop.png" width="16">&nbsp;<a href="https://es.wallapop.com/item/${product.web_slug}" target="_blank">${product.title}</a></h3>
+                            <p>${product.description}</p>
+                            <p><strong>Precio:</strong> ${product.price.amount} ${product.price.currency}</p>
+                            <p align="center"><img src="${product.images[0].urls.small}" alt="${product.title}" width=220/></p>
+                        </div>
+                    `))
+                .addTo(map);
+            // Añadir el marcador al array
+            markers.push(marker);*/
+            /* fin codigo ok */
+
+            // });
+        }
+
+        // Función para eliminar todos los marcadores del mapa
+        function removeMarkers() {
+            markers.forEach(marker => marker.remove());
+            markers = [];
+        }
+
+        function addCategories(categories) {
+            categories.forEach(category => {
+                var ul = document.getElementById("category");
+                ul.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+            });
+        }
+
+        // Función para cerrar los sidebars
+        function closeSidebar() {
+            document.getElementById('sidebar-right').style.display = 'none';
+        }
+
+        document.body.onload = function () {
+            const catUrl = 'https://api.wallapop.com/api/v3/categories';
+
+            fetch(catUrl)
+                .then(response => response.json()) // Convertir respuesta a JSON
+                .then(data => {
+                    // Mostrar resultado en la página
+                    //console.log(data);
+                    const categories = data.categories; //console.log(categories);
+                    addCategories(categories);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al obtener los datos');
+                });
+
+        }
+
+        const restButton = document.getElementById('restButton');
+        restButton.addEventListener('click', () => {
+            //console.log(map.getCenter());            
+            lat = map.getCenter().lat;
+            lng = map.getCenter().lng;
+            // select category
+            var cat = "";
+            var selectedCategory = document.querySelector('#category').value;
+            //console.log(selectedCategory);
+            if (selectedCategory == 0) { } else {
+                cat = "category_id=" + selectedCategory; //console.log(cat); 
+            }
+
+            // select distance
+            var dist = "";
+            var selectedDistance = document.querySelector('#distance_in_km').value;
+            if (selectedDistance == 0) { } else { dist = "distance_in_km=" + selectedDistance; console.log(dist); }
+
+            // Keywords
+            var key = "";
+            console.log(selectedDistance);
+            keywords = document.getElementById("keywords").value;
+            if (typeof keywords === "string" && keywords.length === 0) {
+                console.log("No hay palabras claves");
+            } else if (keywords === null) {
+                console.log("La palabra clave es nula");
+            } else {
+                console.log("OK. Las palabras clave no están vacías o nulas");
+                key = "keywords=" + keywords; console.log(key);
+            }
+            console.log(keywords);
+            console.log(document.getElementById("min").value);
+            console.log(document.getElementById("max").value);
+            // rango precios
+            var minPrice = "";
+            var maxPric = "";
+            if (document.getElementById('prices').checked) {
+                console.log('prices esta activo');
+                minPrice = "min_sale_price=" + document.getElementById("min").value;
+                maxPrice = "max_sale_price=" + document.getElementById("max").value;
+
+            } else {
+                console.log('prices NOOOOOOOOO esta activo');
+            }
+            // select order by
+            var orden = "";
+            var order_by = document.querySelector('#order_by').value;
+            orden = "order_by=" + order_by; //console.log(orden);
+
+            // formar la url Rest
+            var laUrl = 'https://api.wallapop.com/api/v3/search?source=quick_filters&' +
+                key + '&latitude=' + lat + '&longitude=' + lng + '&' + cat + '&' + dist + '&' + minPrice + '&' + maxPrice + '&' + orden;
+
+            //console.log(laUrl); 
+            restUrl = encodeURI(laUrl);
+            //restUrl = encodeURI('https://api.wallapop.com/api/v3/search?source=quick_filters&keywords=' + keywords + '&latitude=' + lat + '&longitude=' + lng + '&order_by=closest');
+            console.log(restUrl);
+            fetch(restUrl)
+                .then(response => response.json()) // Convertir respuesta a JSON
+                .then(data => {
+                    // Mostrar resultado en la página
+                    //console.log(data);
+                    const products = data.data.section.payload.items; console.log(products);
+                    addMarkersToMap(products);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al obtener los datos');
+                });
+
+        });
+
+
+
+    </script>
+</body>
+
+</html>
