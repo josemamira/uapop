@@ -258,7 +258,6 @@
 
             removeMarkers();
 
-            /* inicio prueba */
             //console.log(products[1]);
             products.forEach(product => {
 
@@ -308,40 +307,6 @@
                 });
             });
 
-            /* fin  prueba */
-            /* codigo ok */
-            /*
-            var el = document.createElement('div');
-            el.className = 'marker';
-
-            // Obtener la URL del icono basado en la propiedad 'category'
-            var iconUrl = getIcon(`${product.category_id}`);
-            console.log(iconUrl);
-
-            // Establecer el fondo del marcador como el icono PNG
-            el.style.backgroundImage = 'url(' + iconUrl + ')';
-            el.style.width = '30px'; // Ancho del icono
-            el.style.height = '30px'; // Alto del icono
-            el.style.backgroundSize = '100%'; // Ajustar la imagen al tamaño del div
-
-            const marker = new maplibregl.Marker({ element: el })
-
-                .setLngLat([product.location.longitude, product.location.latitude])
-                .setPopup(new maplibregl.Popup({ offset: 25 }) // Añadir un popup
-                    .setHTML(`
-                        <div class="popup-content">
-                            <h3><img src="img/logo_wallapop.png" width="16">&nbsp;<a href="https://es.wallapop.com/item/${product.web_slug}" target="_blank">${product.title}</a></h3>
-                            <p>${product.description}</p>
-                            <p><strong>Precio:</strong> ${product.price.amount} ${product.price.currency}</p>
-                            <p align="center"><img src="${product.images[0].urls.small}" alt="${product.title}" width=220/></p>
-                        </div>
-                    `))
-                .addTo(map);
-            // Añadir el marcador al array
-            markers.push(marker);*/
-            /* fin codigo ok */
-
-            // });
         }
 
         // Función para eliminar todos los marcadores del mapa
