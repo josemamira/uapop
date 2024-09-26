@@ -89,6 +89,8 @@
 
         /* Sidebar derecho */
         .sidebar-right {
+            font-size: 12px;
+            font-family: Tahoma, Verdana, sans-serif;
             width: 300px;
             background-color: #f8f9fa;
             border-left: 1px solid #ddd;
@@ -118,6 +120,23 @@
             fill: #fff;
             margin-left: 25px;
         }
+
+        /* Estilo del marker (usamos una imagen personalizada) */
+        .center-marker {
+            position: absolute;
+            background-image: url('img/cruceta.svg');
+            /* URL de la imagen */
+            background-size: contain;
+            width: 25px;
+            height: 25px;
+            pointer-events: none;
+            /* El marker no debe interferir con las interacciones en el mapa */
+            top: 50%;
+            /* Posicionar en el centro vertical */
+            left: 50%;
+            /* Posicionar en el centro horizontal */
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
 
@@ -125,6 +144,9 @@
     <link rel="stylesheet" href="css/panel.css" />
     <div class="container">
         <div id="map"></div>
+        <!-- Marker en el centro -->
+        <div class="center-marker"></div>
+
         <div class="map-overlay top">
             <div class="map-overlay-inner">
                 <h3>UApop</h3>
@@ -176,13 +198,16 @@
                 <button type="button" id="restButton" name="restButton" class="button">
                     Obtener productos
                 </button>
+                <div id="cuentaProducts"></div>
             </div>
         </div>
         <!-- Sidebar derecho con la información del marcador -->
         <div class="sidebar-right" id="sidebar-right">
-            <h2>Detalles del Marcador</h2>
+            <div class="mapboxgl-popup-close-button" onclick="closeSidebar()">X</div>
+            <h2>&nbsp</h2>
+            <hr>
             <div id="marker-info"></div>
-            <button class="button" onclick="closeSidebar()">Cerrar</button>
+            <p align="center"><button class="button" onclick="closeSidebar()">Cerrar</button></p>
         </div>
     </div>
 
@@ -199,6 +224,18 @@
             center: [-0.51, 38.38], // Coordenadas iniciales [longitud, latitud]
             zoom: 12 // Nivel de zoom inicial
         });
+
+        // Cuando el usuario hace pan (mueve el mapa), el marcador se mantiene visualmente centrado
+        map.on('moveend', function() {
+            // Obtener las coordenadas del centro del mapa después del movimiento
+            var center = map.getCenter();
+            console.log('El centro del mapa está en: ', center);
+        });
+        // marker en el centro del mapa
+        /*const centroMapa = new maplibregl.Marker()
+            .setLngLat([map.getCenter().lng, map.getCenter().lat])
+            .addTo(map);*/
+
 
         // Añadir controles de zoom y rotación al mapa
         //map.addControl(new maplibregl.NavigationControl());
@@ -288,9 +325,10 @@
                     var infoDiv = document.getElementById('marker-info');
                     infoDiv.innerHTML = `
                     <div class="popup-content">
-                        <h3><img src="img/logo_wallapop.png" width="16">&nbsp;<a href="https://es.wallapop.com/item/${product.web_slug}" target="_blank">${product.title}</a></h3>
-                        <p>${product.description}</p>
-                        <p><strong>Precio:</strong> ${product.price.amount} ${product.price.currency}</p>
+                        <h3 align="center">${product.title}</h3>
+                        <br>                        
+                        <p align="center">${product.description}</p>
+                        <p><strong>Precio:</strong> ${product.price.amount} ${product.price.currency}</p><br>
                         <p align="center"><img src="${product.images[0].urls.small}" alt="${product.title}" width=220/></p>
                         <hr>
                         <button type="button" 
@@ -307,7 +345,7 @@
 
                 });
             });
-            
+
         }
 
         // Función para eliminar todos los marcadores del mapa
@@ -407,8 +445,16 @@
                 .then(response => response.json()) // Convertir respuesta a JSON
                 .then(data => {
                     // Mostrar resultado en la página
+
                     //console.log(data);
                     const products = data.data.section.payload.items; console.log(products);
+                    // contar resultado
+                    var productsCount = products.length; console.log(productsCount);
+                    if (productsCount > 0) {
+                        document.getElementById("cuentaProducts").innerHTML = "<h3><img src = 'img/alegre.svg' width=30 /> Bien!. Hay " + productsCount + " productos</h3>";
+                    } else { document.getElementById("cuentaProducts").innerHTML = "<h3><img src = 'img/triste.svg' width=30 /> Ohh! No hay nada<h3>"; }
+
+
                     addMarkersToMap(products);
                 })
                 .catch(error => {
