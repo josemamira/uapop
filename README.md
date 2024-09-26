@@ -189,6 +189,8 @@ NOTA: En cada fichero hay que cambiar la línea con la URL para que funcione con
 
 Ejemplos web usando Maplibre GL JS
 
+- [Demo principal: index.html](https://josemamira.github.io/uapop/maplibre/index.html)
+- [Otra demo: index2.html](https://josemamira.github.io/uapop/maplibre/index2.html)
 - [Geojson in html code: test1_geojson_text.html](https://josemamira.github.io/uapop/maplibre/test1_geojson_text.html)
 - [Geojson from URL link:  test2_geojson_url.html](https://josemamira.github.io/uapop/maplibre/test2_geojson_url.html)
 - [REST to map:  rest2map.html](https://josemamira.github.io/uapop/maplibre/rest2map.html)
