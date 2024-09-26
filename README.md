@@ -10,7 +10,7 @@ This project aims to show some examples of using the Wallapop REST API to genera
 
 Demo HTML pages using Maplibre GL JS
 
-- [Main demo:  index.html](https://josemamira.github.io/uapop/maplibre/index.html) <img src="up.png" alt="recommended" width="32"/>
+#### [Main demo:  index.html](https://josemamira.github.io/uapop/maplibre/index.html) <img src="up.png" alt="recommended" width="32"/>
 - [Geojson in html code: test1_geojson_text.html](https://josemamira.github.io/uapop/maplibre/test1_geojson_text.html)
 - [Geojson from URL link:  test2_geojson_url.html](https://josemamira.github.io/uapop/maplibre/test2_geojson_url.html)
 - [REST to map:  rest2map.html](https://josemamira.github.io/uapop/maplibre/rest2map.html)
