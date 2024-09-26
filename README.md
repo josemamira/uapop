@@ -4,7 +4,9 @@
 
 [<img src="screen.png">](https://josemamira.github.io/uapop/maplibre)
 
-This project aims to show some examples of using the Wallapop REST API to generate web maps using [MapLibre GL JS](https://github.com/maplibre/maplibre-gl-js). It also includes some Python utilities to convert API requests into formats such as Excel (XLS), CSV, GeoJSON or LibreOffice Calc (ODS).
+This project aims to show some examples of using the Wallapop REST API to generate web maps using [MapLibre GL JS](https://github.com/maplibre/maplibre-gl-js). 
+As a professor at the University of Alicante (that's why it's called UApop), I wanted to show the benefits of using geographic information technologies applied to webgis. This project aims to encourage students to use these tools.
+It also includes some Python utilities to convert API requests into formats such as Excel (XLS), CSV, GeoJSON or LibreOffice Calc (ODS).
 
 ### DEMOS
 
@@ -102,7 +104,9 @@ NOTE: In each file you have to change the line with the URL so that it works wit
 ## Español
 # UAPOP: Utilidades para crear mapas web usando el API REST de Wallapop
 
-Este proyecto pretende mostrar algunos ejemplos de uso del API REST de Wallapop para generar mapas web usando MapLibre GL JS. También incluye algunas utilidades en Python para convertir las peticiones de la API en formatos como Excel (XLS), CSV, GeoJSON o LibreOffice Calc (ODS)
+Este proyecto pretende mostrar algunos ejemplos de uso del API REST de Wallapop para generar mapas web usando MapLibre GL JS. 
+Como profesor de la Universidad de Alicante (por eso tiene el nombre de UApop), he querido mostrar las bondades del uso de las tecnologías de la información geográfica aplicadas a los webgis. Este proyecto tiene como objetivo incentivar al alumnado en el uso de estas herramientas.
+También incluye algunas utilidades en Python para convertir las peticiones de la API en formatos como Excel (XLS), CSV, GeoJSON o LibreOffice Calc (ODS)
 
 Fecha documento: 11 septiembre 2024
 
